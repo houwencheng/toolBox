@@ -45,6 +45,7 @@
   <ItemGroup>
     <Compile Include="AsyncExample.cs" />
     <Compile Include="CpuTestExample.cs" />
+    <Compile Include="MD5Example.cs" />
     <Compile Include="MutiThreadTest.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -78,7 +79,6 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>
-    </PostBuildEvent>
+    <PostBuildEvent>copy $(TargetPath) $(TargetDir)MD5.exe</PostBuildEvent>
   </PropertyGroup>
 </Project>

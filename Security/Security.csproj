@@ -42,6 +42,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AES.cs" />
+    <Compile Include="MD5.cs" />
     <Compile Include="RSAAES.cs" />
     <Compile Include="KeyType.cs" />
     <Compile Include="RSA.cs" />
