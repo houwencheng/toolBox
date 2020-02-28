@@ -56,10 +56,6 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\DockFormFramework\DockFormFramework.csproj">
-      <Project>{941d11d7-c146-4462-9e6c-ea094efe81d0}</Project>
-      <Name>DockFormFramework</Name>
-    </ProjectReference>
     <ProjectReference Include="..\DB\DB.csproj">
       <Project>{98b764ad-19e2-442b-bc4f-888249fca8a1}</Project>
       <Name>DB</Name>
