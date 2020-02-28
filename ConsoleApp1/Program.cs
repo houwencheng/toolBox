@@ -27,6 +27,8 @@ namespace ConsoleApp1
         [MTAThread]
         static void Main(string[] args)
         {
+            MD5Example mD5Example = new MD5Example();
+            mD5Example.Run();
             //new PerformanceTest.CPUTest().MultiTheadAddTest(1);
 
             var program = new Program();
