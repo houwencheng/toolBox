@@ -27,6 +27,9 @@ namespace ConsoleApp1
         [MTAThread]
         static void Main(string[] args)
         {
+            OutShort.Main_(args);
+            return;
+
             MD5Example mD5Example = new MD5Example();
             mD5Example.Run();
             //new PerformanceTest.CPUTest().MultiTheadAddTest(1);
@@ -71,7 +74,7 @@ namespace ConsoleApp1
 
             //DB.DB db = new DB.DB();
 
-            DockFormFramework.Program.Run();
+            //DockFormFramework.Program.Run();
             //new SpeakerTestExample().SpeakHelloWord(20);
             //new CpuTestExample().CpuTest1(args);
             var mutiThreadTest = new MutiThreadTest();

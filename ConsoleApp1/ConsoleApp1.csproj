@@ -21,7 +21,7 @@
     <OutputPath>bin\Debug\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
+    <WarningLevel>0</WarningLevel>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -31,6 +31,10 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject>
+    </StartupObject>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -47,6 +51,7 @@
     <Compile Include="CpuTestExample.cs" />
     <Compile Include="MD5Example.cs" />
     <Compile Include="MutiThreadTest.cs" />
+    <Compile Include="OutShort.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RSAExample.cs" />
@@ -56,10 +61,6 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\DockFormFramework\DockFormFramework.csproj">
-      <Project>{941d11d7-c146-4462-9e6c-ea094efe81d0}</Project>
-      <Name>DockFormFramework</Name>
-    </ProjectReference>
     <ProjectReference Include="..\DB\DB.csproj">
       <Project>{98b764ad-19e2-442b-bc4f-888249fca8a1}</Project>
       <Name>DB</Name>
@@ -79,6 +80,6 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>copy $(TargetPath) $(TargetDir)MD5.exe</PostBuildEvent>
+    <PostBuildEvent>::copy $(TargetPath) $(TargetDir)MD5.exe</PostBuildEvent>
   </PropertyGroup>
 </Project>
