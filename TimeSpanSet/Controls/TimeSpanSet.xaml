@@ -1,0 +1,130 @@
+﻿<UserControl x:Class="TimeSpanSet.Controls.TimeSpanSet"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:TimeSpanSet.Controls"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+    <UserControl.Resources>
+
+        <local:ValueToTimeConverter x:Key="ValueConverter"/>
+
+        <Style TargetType="{x:Type local:Span}" x:Key="SpanNormalStyle">
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="BorderBrush" Value="Gray"/>
+            <Setter Property="Background" Value="Blue"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type local:Span}">
+                        <Border Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"/>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style TargetType="{x:Type local:Span}" x:Key="SpanDragStyle" BasedOn="{StaticResource SpanNormalStyle}">
+            <Setter Property="BorderThickness" Value="2"/>
+            <Setter Property="BorderBrush" Value="Blue"/>
+            <Setter Property="Background" Value="Yellow"/>
+        </Style>
+
+        <Style TargetType="{x:Type local:Span}" x:Key="SpanSelectedStyle" BasedOn="{StaticResource SpanNormalStyle}">
+            <Setter Property="Background" Value="Red"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type local:Span}">
+                        <ControlTemplate.Resources>
+                            <Style TargetType="{x:Type Ellipse}">
+                                <Setter Property="Width" Value="6"/>
+                                <Setter Property="Height" Value="6"/>
+                                <Setter Property="Stroke" Value="Black"/>
+                                <Setter Property="Fill" Value="White"/>
+                            </Style>
+                        </ControlTemplate.Resources>
+                        <Grid>
+                            <Border Background="{TemplateBinding Background}"
+                                    BorderBrush="{TemplateBinding BorderBrush}"
+                                    BorderThickness="{TemplateBinding BorderThickness}"
+                                    >
+                            </Border>
+                            <Ellipse  x:Name="leftEllipse"
+                                        HorizontalAlignment="Left" VerticalAlignment="Center" 
+                                         Margin="-2,0" 
+                                         MouseLeftButtonDown="leftEllipse_MouseLeftButtonDown"
+                                         MouseLeftButtonUp="leftEllipse_MouseLeftButtonUp"
+                                      />
+                            <Ellipse  x:Name="rightEllipse"
+                                         HorizontalAlignment="Right" VerticalAlignment="Center" 
+                                         Margin="-2,0"
+                                         MouseLeftButtonDown="rightEllipse_MouseLeftButtonDown"
+                                         MouseRightButtonUp="rightEllipse_MouseRightButtonUp"
+                                         />
+                            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Margin="0,20,0,0">
+                                <StackPanel Orientation="Horizontal" Background="White" MouseMove="StackPanel_MouseMove">
+                                    <StackPanel.Resources>
+                                        <Style TargetType="TextBox">
+                                            <Setter Property="MinWidth" Value="40"/>
+                                            <Setter Property="VerticalAlignment" Value="Center"/>
+                                            <Setter Property="Margin" Value="5,0"/>
+                                        </Style>
+                                        <Style TargetType="Button">
+                                            <Setter Property="Template">
+                                                <Setter.Value>
+                                                    <ControlTemplate>
+                                                        <TextBlock Text="{TemplateBinding Button.Content}" Foreground="Blue"/>
+                                                    </ControlTemplate>
+                                                </Setter.Value>
+                                            </Setter>
+                                        </Style>
+                                    </StackPanel.Resources>
+                                    <TextBox x:Name="begin" Text="{Binding Path=BeginValue, Mode=TwoWay, RelativeSource={RelativeSource Mode=TemplatedParent},Converter={StaticResource ValueConverter}}"/>
+                                    <TextBlock Text="-" VerticalAlignment="Center"/>
+                                    <TextBox x:Name="end" Text="{Binding Path=EndValue, Mode=TwoWay, RelativeSource={RelativeSource Mode=TemplatedParent},Converter={StaticResource ValueConverter}}"/>
+                                    <Button Content="确定" Click="SetButton_Click" Margin="5,0" VerticalAlignment="Center"/>
+                                    <Button Content="删除" Click="DeleteBtnClick" Margin="5,0" VerticalAlignment="Center"/>
+                                </StackPanel>
+                            </Canvas>
+                        </Grid>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style TargetType="{x:Type local:Mark}" x:Key="markLevelStyle">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate>
+                        <Grid>
+                            <TextBlock Text="{TemplateBinding Property=local:Mark.Value, Converter={StaticResource ValueConverter}}" 
+                                       Visibility="{TemplateBinding Property=local:Mark.TitleVisibility}"
+                                       HorizontalAlignment="Left" Margin="-15,-15"/>
+                            <Rectangle Width="1"
+                                       Fill="Black"
+                                       Height="{TemplateBinding Height}"
+                                       SnapsToDevicePixels="True"
+                                       HorizontalAlignment="Left"
+                                       >
+                                <Rectangle.ToolTip>
+                                    <TextBlock Text="{TemplateBinding Property=local:Mark.Value, Converter={StaticResource ValueConverter}}" />
+                                </Rectangle.ToolTip>
+                            </Rectangle>
+                        </Grid>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </UserControl.Resources>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="3*"/>
+            <RowDefinition Height="2*"/>
+        </Grid.RowDefinitions>
+        <Canvas x:Name="markCanvas" Background="Transparent" Grid.Row="0" 
+                />
+        <!--Margin="-15,15,0,0"-->
+        <Canvas x:Name="canvas" Background="Gray" Grid.Row="1" />
+    </Grid>
+</UserControl>
