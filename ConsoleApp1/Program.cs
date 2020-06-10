@@ -27,6 +27,18 @@ namespace ConsoleApp1
         [MTAThread]
         static void Main(string[] args)
         {
+            StructTest structTest = new StructTest();
+            //structTest.InitStructA();
+
+            var A = structTest.StructA;
+            A.i = 123;
+            var buffer = System.Text.Encoding.UTF8.GetBytes("hello2");
+            A.o = new System.IO.MemoryStream(buffer);
+            string s = GetString(A);
+            string s2 = GetString(structTest.StructA);
+
+            Console.WriteLine(s);
+            return;
             OutShort.Main_(args);
             return;
 
@@ -48,7 +60,7 @@ namespace ConsoleApp1
             var t = program.Sum(5);
             var flag = t.Wait(1000);
             var result = t.Result;
-              
+
             //var result = program.Sum(5).Result;
             Console.WriteLine("Result:{0}", result);
             Console.WriteLine("Please press any key to exit");
@@ -85,6 +97,16 @@ namespace ConsoleApp1
             Console.WriteLine("1:{0}", System.Threading.Thread.CurrentThread.ManagedThreadId);
 
             Console.ReadLine();
+        }
+
+        private static string GetString(StructA A)
+        {
+            var stream = (System.IO.MemoryStream)A.o;
+            var length = stream.Length;
+            var bufer = new byte[length];
+            stream.Read(bufer, 0, (int)length);
+            var s = System.Text.Encoding.UTF8.GetString(bufer);
+            return s;
         }
 
         public async Task<double> Sum(int times)

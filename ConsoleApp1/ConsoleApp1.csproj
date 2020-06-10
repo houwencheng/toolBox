@@ -56,6 +56,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RSAExample.cs" />
     <Compile Include="RSAExExample.cs" />
+    <Compile Include="StructTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
