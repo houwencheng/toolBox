@@ -23,16 +23,7 @@ namespace TimeSpanSet.ViewModel
         public List<int> UnitLevels { get; set; }
 
         public TimeSpanSetViewModel()
-        {
-            MaxValue = 24 * 60;
-            UnitValue = 30;
-            UnitLevels = new List<int>() { 1, 2, 4 };
-            //UnitLevels = new List<int>() { 1, 2 };
-            var values = new List<double[]>();
-            //values.Add(new double[] { 2, 18 });
-            //values.Add(new double[] { 50, 30 });
-            //values.Add(new double[] { 80, 10 });
-            Values = values;
+        { 
             DeleteSpanCommand = new DeleteSpanCommand();
         }
 

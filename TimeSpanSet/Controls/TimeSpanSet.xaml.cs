@@ -28,6 +28,31 @@ namespace TimeSpanSet.Controls
             canvas.MouseLeave += Canvas_MouseLeave;
             canvas.MouseLeftButtonUp += Canvas_MouseLeftButtonUp;
             canvas.SizeChanged += TimeSpanSet_SizeChanged;
+            markCanvas.Loaded += MarkCanvas_Loaded;
+            Loaded += TimeSpanSet_Loaded;
+            Unloaded += TimeSpanSet_Unloaded;
+        }
+
+        private void TimeSpanSet_Unloaded(object sender, RoutedEventArgs e)
+        {
+            Mouse.RemoveMouseDownHandler(System.Windows.Application.Current.MainWindow, MouseButtonEventHandler);
+        }
+
+        private void TimeSpanSet_Loaded(object sender, RoutedEventArgs e)
+        {
+            Mouse.AddMouseDownHandler(System.Windows.Application.Current.MainWindow, MouseButtonEventHandler);
+        }
+
+        public void MouseButtonEventHandler(object sender, MouseButtonEventArgs e)
+        {
+            // 鼠标点击时取消选中
+            if (selectedSpan != null)
+                selectedSpan.Style = GetNormalStyle();
+        }
+
+        private void MarkCanvas_Loaded(object sender, RoutedEventArgs e)
+        {
+            UpdateMarkUI();
         }
 
         private void TimeSpanSet_SizeChanged(object sender, SizeChangedEventArgs e)
@@ -383,6 +408,7 @@ namespace TimeSpanSet.Controls
         {
             if (!isSizeRight) return;
             var xNow = e.GetPosition(canvas).X;
+            if (xNow >= canvas.ActualWidth -1) return;
             var xDiff = xNow - xPre;
             xPre = xNow;
             var width = selectedSpan.Width;
@@ -395,7 +421,9 @@ namespace TimeSpanSet.Controls
 
             bool notInOther = CheckNotInOtherSpan(x, span);
             if (notInOther)
+            {
                 span.Width = newWidth;
+            }
         }
 
         private void EndSizeRight()
@@ -485,7 +513,14 @@ namespace TimeSpanSet.Controls
         /// <summary>
         /// 总长度
         /// </summary>
-        public double Lenght { get { return ActualWidth; } }
+        public double Lenght
+        {
+            get
+            {
+                //if (ActualWidth == 0 || ActualWidth == double.NaN) return Width;
+                return ActualWidth;
+            }
+        }
 
         private double ratio = 0;
         /// <summary>
@@ -594,6 +629,7 @@ namespace TimeSpanSet.Controls
         {
             if (UnitValue == 0) return;
             if (UnitLevels == null) return;
+            if (!markCanvas.IsLoaded) return;
             int levelsCount = UnitLevels.Count;
 
             var allMarkCount = MaxValue / UnitValue;

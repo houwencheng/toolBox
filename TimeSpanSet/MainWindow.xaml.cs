@@ -25,6 +25,10 @@ namespace TimeSpanSet
         {
             InitializeComponent();
             TimeSpanSetViewModel = new ViewModel.TimeSpanSetViewModel();
+            TimeSpanSetViewModel.MaxValue = 24 * 60;
+            TimeSpanSetViewModel.UnitValue = 30;
+            TimeSpanSetViewModel.UnitLevels = new List<int>() { 1, 2, 4 };
+            //TimeSpanSetViewModel.Values = new List<double[]>();
             DataContext = this;
         }
     }

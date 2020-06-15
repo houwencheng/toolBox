@@ -12,8 +12,8 @@
 
         <Style TargetType="{x:Type local:Span}" x:Key="SpanNormalStyle">
             <Setter Property="BorderThickness" Value="1"/>
-            <Setter Property="BorderBrush" Value="Gray"/>
             <Setter Property="Background" Value="Blue"/>
+            <Setter Property="BorderBrush" Value="Blue"/>
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="{x:Type local:Span}">
@@ -28,11 +28,13 @@
         <Style TargetType="{x:Type local:Span}" x:Key="SpanDragStyle" BasedOn="{StaticResource SpanNormalStyle}">
             <Setter Property="BorderThickness" Value="2"/>
             <Setter Property="BorderBrush" Value="Blue"/>
-            <Setter Property="Background" Value="Yellow"/>
+            <Setter Property="Background" Value="Blue"/>
         </Style>
 
         <Style TargetType="{x:Type local:Span}" x:Key="SpanSelectedStyle" BasedOn="{StaticResource SpanNormalStyle}">
-            <Setter Property="Background" Value="Red"/>
+            <Setter Property="Background" Value="Blue"/>
+            <Setter Property="Background" Value="Blue"/>
+            <Setter Property="Foreground" Value="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=local:TimeSpanSet},Path=Foreground}"/>
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="{x:Type local:Span}">
@@ -63,28 +65,29 @@
                                          MouseRightButtonUp="rightEllipse_MouseRightButtonUp"
                                          />
                             <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Margin="0,20,0,0">
-                                <StackPanel Orientation="Horizontal" Background="White" MouseMove="StackPanel_MouseMove">
+                                <StackPanel Orientation="Horizontal" Background="Transparent" MouseMove="StackPanel_MouseMove">
                                     <StackPanel.Resources>
                                         <Style TargetType="TextBox">
                                             <Setter Property="MinWidth" Value="40"/>
                                             <Setter Property="VerticalAlignment" Value="Center"/>
                                             <Setter Property="Margin" Value="5,0"/>
+                                            <Setter Property="Background" Value="Transparent"/>
                                         </Style>
                                         <Style TargetType="Button">
                                             <Setter Property="Template">
                                                 <Setter.Value>
                                                     <ControlTemplate>
-                                                        <TextBlock Text="{TemplateBinding Button.Content}" Foreground="Blue"/>
+                                                        <TextBlock Text="{TemplateBinding Button.Content}" Foreground="{TemplateBinding Foreground}"/>
                                                     </ControlTemplate>
                                                 </Setter.Value>
                                             </Setter>
                                         </Style>
                                     </StackPanel.Resources>
-                                    <TextBox x:Name="begin" Text="{Binding Path=BeginValue, Mode=TwoWay, RelativeSource={RelativeSource Mode=TemplatedParent},Converter={StaticResource ValueConverter}}"/>
-                                    <TextBlock Text="-" VerticalAlignment="Center"/>
-                                    <TextBox x:Name="end" Text="{Binding Path=EndValue, Mode=TwoWay, RelativeSource={RelativeSource Mode=TemplatedParent},Converter={StaticResource ValueConverter}}"/>
-                                    <Button Content="确定" Click="SetButton_Click" Margin="5,0" VerticalAlignment="Center"/>
-                                    <Button Content="删除" Click="DeleteBtnClick" Margin="5,0" VerticalAlignment="Center"/>
+                                    <TextBox x:Name="begin" Text="{Binding Path=BeginValue, Mode=TwoWay, RelativeSource={RelativeSource Mode=TemplatedParent},Converter={StaticResource ValueConverter}}" Foreground="{TemplateBinding Foreground}" BorderBrush="{TemplateBinding Foreground}"/>
+                                    <TextBlock Text="-" VerticalAlignment="Center" Foreground="{TemplateBinding Foreground}"/>
+                                    <TextBox x:Name="end" Text="{Binding Path=EndValue, Mode=TwoWay, RelativeSource={RelativeSource Mode=TemplatedParent},Converter={StaticResource ValueConverter}}" Foreground="{TemplateBinding Foreground}" BorderBrush="{TemplateBinding Foreground}"/>
+                                    <Button Content="确定" Click="SetButton_Click" Margin="5,0" VerticalAlignment="Center" Foreground="{TemplateBinding Foreground}"/>
+                                    <Button Content="删除" Click="DeleteBtnClick" Margin="5,0" VerticalAlignment="Center" Foreground="{TemplateBinding Foreground}"/>
                                 </StackPanel>
                             </Canvas>
                         </Grid>
@@ -94,15 +97,17 @@
         </Style>
 
         <Style TargetType="{x:Type local:Mark}" x:Key="markLevelStyle">
+            <Setter Property="Foreground" Value="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=local:TimeSpanSet},Path=Foreground}"/>
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate>
                         <Grid>
                             <TextBlock Text="{TemplateBinding Property=local:Mark.Value, Converter={StaticResource ValueConverter}}" 
                                        Visibility="{TemplateBinding Property=local:Mark.TitleVisibility}"
-                                       HorizontalAlignment="Left" Margin="-15,-15"/>
+                                       Foreground="{TemplateBinding Property=local:Mark.Foreground}"
+                                       HorizontalAlignment="Left" Margin="-15"/>
                             <Rectangle Width="1"
-                                       Fill="Black"
+                                       Fill="{TemplateBinding Property=local:Mark.Foreground}"
                                        Height="{TemplateBinding Height}"
                                        SnapsToDevicePixels="True"
                                        HorizontalAlignment="Left"
@@ -119,12 +124,12 @@
     </UserControl.Resources>
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="3*"/>
+            <RowDefinition Height="2*"/>
             <RowDefinition Height="2*"/>
         </Grid.RowDefinitions>
         <Canvas x:Name="markCanvas" Background="Transparent" Grid.Row="0" 
                 />
         <!--Margin="-15,15,0,0"-->
-        <Canvas x:Name="canvas" Background="Gray" Grid.Row="1" />
+        <Canvas x:Name="canvas" Background="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=local:TimeSpanSet},Path=Foreground}" Grid.Row="1" />
     </Grid>
 </UserControl>

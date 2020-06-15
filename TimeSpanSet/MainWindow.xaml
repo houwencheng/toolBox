@@ -8,7 +8,7 @@
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
     <Grid>
-        <StackPanel Orientation="Vertical">
+        <StackPanel Orientation="Vertical" Margin="20">
             <!--<Controls:TimeSpanSet  DataContext="{Binding TimeSpanSetViewModel}" 
                                MaxValue="{Binding MaxValue}"
                                Values="{Binding Values, Mode=TwoWay}"
@@ -19,8 +19,21 @@
                                    UnitLevels="{Binding UnitLevels}"
                                    Values="{Binding Values, Mode=TwoWay}"
                                    Focusable="True"
-                                   VerticalAlignment="Top" Height="40"
-                                   Margin="20"/>
+                                   VerticalAlignment="Top" Height="30"
+                                   Foreground="CornflowerBlue"
+                                   />
+
+            <!--<Controls:TimeSpanSet  DataContext="{Binding TimeSpanSetViewModel}" 
+                                   MaxValue="{Binding MaxValue}"
+                                   UnitValue="{Binding UnitValue}"
+                                   UnitLevels="{Binding UnitLevels}"
+                                   Values="{Binding Values, Mode=TwoWay}"
+                                   Focusable="True"
+                                   VerticalAlignment="Top" Height="30"
+                                   Foreground="CornflowerBlue"
+                                   />-->
+            <!--<Button  Height="40" Width="40" HorizontalAlignment="Left"/>-->
+            <!--Width="600"-->
         </StackPanel>
     </Grid>
 </Window>
