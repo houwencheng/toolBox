@@ -1,15 +1,24 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace TimeSpanSet.ViewModel
 {
-    public class TimeSpanSetViewModel
+    public class TimeSpanSetViewModel : System.ComponentModel.INotifyPropertyChanged
     {
-
-        public List<double[]> Values { get; set; }
+        private List<double[]> values;
+        public List<double[]> Values
+        {
+            get => values; set
+            {
+                values = value;
+                if (PropertyChanged != null)
+                    PropertyChanged(this, new PropertyChangedEventArgs("Values"));
+            }
+        }
 
         public double MaxValue { get; set; }
 
@@ -23,13 +32,14 @@ namespace TimeSpanSet.ViewModel
         public List<int> UnitLevels { get; set; }
 
         public TimeSpanSetViewModel()
-        { 
+        {
             DeleteSpanCommand = new DeleteSpanCommand();
         }
 
         public System.Windows.Input.ICommand SetSpanCommand { get; set; }
         public System.Windows.Input.ICommand DeleteSpanCommand { get; set; }
 
+        public event PropertyChangedEventHandler PropertyChanged;
     }
 
 
