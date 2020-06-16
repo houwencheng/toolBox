@@ -64,7 +64,7 @@
                                          MouseLeftButtonDown="rightEllipse_MouseLeftButtonDown"
                                          MouseRightButtonUp="rightEllipse_MouseRightButtonUp"
                                          />
-                            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Margin="0,20,0,0">
+                            <Canvas HorizontalAlignment="Left" VerticalAlignment="Top" Margin="0,12,0,0">
                                 <StackPanel Orientation="Horizontal" Background="Transparent" MouseMove="StackPanel_MouseMove">
                                     <StackPanel.Resources>
                                         <Style TargetType="TextBox">
@@ -105,7 +105,7 @@
                             <TextBlock Text="{TemplateBinding Property=local:Mark.Value, Converter={StaticResource ValueConverter}}" 
                                        Visibility="{TemplateBinding Property=local:Mark.TitleVisibility}"
                                        Foreground="{TemplateBinding Property=local:Mark.Foreground}"
-                                       HorizontalAlignment="Left" Margin="-15"/>
+                                       HorizontalAlignment="Left" Margin="-15" VerticalAlignment="Top"/>
                             <Rectangle Width="1"
                                        Fill="{TemplateBinding Property=local:Mark.Foreground}"
                                        Height="{TemplateBinding Height}"
