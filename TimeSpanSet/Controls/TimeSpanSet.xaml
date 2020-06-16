@@ -113,7 +113,9 @@
                                        HorizontalAlignment="Left"
                                        >
                                 <Rectangle.ToolTip>
-                                    <TextBlock Text="{TemplateBinding Property=local:Mark.Value, Converter={StaticResource ValueConverter}}" />
+                                    <ToolTip Background="Transparent" BorderThickness="0">
+                                        <TextBlock Text="{TemplateBinding Property=local:Mark.Value, Converter={StaticResource ValueConverter}}" Foreground="{TemplateBinding Property=local:Mark.Foreground}" />
+                                    </ToolTip>
                                 </Rectangle.ToolTip>
                             </Rectangle>
                         </Grid>

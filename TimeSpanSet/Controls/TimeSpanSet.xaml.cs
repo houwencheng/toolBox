@@ -408,11 +408,12 @@ namespace TimeSpanSet.Controls
         {
             if (!isSizeRight) return;
             var xNow = e.GetPosition(canvas).X;
-            if (xNow >= canvas.ActualWidth -1) return;
             var xDiff = xNow - xPre;
-            xPre = xNow;
             var width = selectedSpan.Width;
             var newWidth = width + xDiff;
+
+            var outed = newWidth + (double)selectedSpan.GetValue(Canvas.LeftProperty) > canvas.ActualWidth;
+            if (outed) return;
 
             var x = xNow;
             var span = selectedSpan;
@@ -422,6 +423,7 @@ namespace TimeSpanSet.Controls
             bool notInOther = CheckNotInOtherSpan(x, span);
             if (notInOther)
             {
+                xPre = xNow;
                 span.Width = newWidth;
             }
         }
@@ -457,27 +459,23 @@ namespace TimeSpanSet.Controls
             if (!isSizeLeft) return;
             var xNow = e.GetPosition(canvas).X;
             var xDiff = xNow - xPre;
-            xPre = xNow;
-            var width = selectedSpan.Width;
-            var newWidth = width + (-xDiff);
 
-            var x = xNow;
+
             var span = selectedSpan;
-
-            if (newWidth < 0) return;
-
-            bool notInOther = CheckNotInOtherSpan(x, span);
-            if (notInOther)
-                span.Width = newWidth;
-
             var left = (double)span.GetValue(Canvas.LeftProperty);
             var leftNow = left + xDiff;
-            if (leftNow < 0) leftNow = 0;
+            if (leftNow < 0) return;
 
             var checkLeftOk = CheckNotInOtherSpan(leftNow, span);
             if (!checkLeftOk) return;
 
+            var width = span.Width;
+            var newWidth = width + (-xDiff);
+            if (newWidth < 0) return;
+
             span.SetValue(Canvas.LeftProperty, leftNow);
+            span.Width = newWidth;
+            xPre = xNow;
         }
 
         #endregion
