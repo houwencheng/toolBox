@@ -632,7 +632,7 @@ namespace TimeSpanSet.Controls
 
             var allMarkCount = MaxValue / UnitValue;
             var maxMarkHeigth = markCanvas.ActualHeight;
-
+            markCanvas.Children.Clear();
             for (int i = 0; i <= allMarkCount; i++)
             {
                 var mark = new Mark();
