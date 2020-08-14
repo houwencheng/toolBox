@@ -47,8 +47,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AsyncExample.cs" />
     <Compile Include="CpuTestExample.cs" />
+    <Compile Include="InterFace\IPrangramRun.cs" />
     <Compile Include="MD5Example.cs" />
     <Compile Include="MutiThreadTest.cs" />
     <Compile Include="OutShort.cs" />
@@ -57,6 +57,7 @@
     <Compile Include="RSAExample.cs" />
     <Compile Include="RSAExExample.cs" />
     <Compile Include="StructTest.cs" />
+    <Compile Include="ThreadExample.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

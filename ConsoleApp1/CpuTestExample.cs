@@ -6,15 +6,12 @@ using System.Threading.Tasks;
 
 namespace ConsoleApp1
 {
-    public class CpuTestExample
+    public class CpuTestExample : InterFace.IProgramRun
     {
-        public void CpuTest1(string[] args)
+        public void Run()
         {
             int threadsCount = 1;
-            if (args.Length > 0)
-            {
-                threadsCount = int.Parse(args[0]);
-            }
+
             PerformanceTest.CPUTest cpuTest = new PerformanceTest.CPUTest();
             cpuTest.MultiTheadAddTest(threadsCount);
         }

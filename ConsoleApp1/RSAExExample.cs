@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace ConsoleApp1
 {
-    public class RSAExExample
+    public class RSAExExample : InterFace.IProgramRun
     {
         private const string choice1 = "1";
         private const string choice2 = "2";

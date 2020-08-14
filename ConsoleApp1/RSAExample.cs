@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace ConsoleApp1
 {
-    public class RSAExample
+    public class RSAExample : InterFace.IProgramRun
     {
         const string choice1 = "1";
         const string choice2 = "2";

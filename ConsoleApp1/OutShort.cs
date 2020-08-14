@@ -9,9 +9,9 @@ namespace ConsoleApp1
     /// <summary>
     /// 外部排序
     /// </summary>
-    public class OutShort
+    public class OutShort : InterFace.IProgramRun
     {
-        public static void Main_(string[] args)
+        public void Run()
         {
             string dataFileName = "data";
             double dataCount = 1e1;
@@ -148,5 +148,7 @@ namespace ConsoleApp1
                 fsTxt.Flush();
             }
         }
+
+
     }
 }

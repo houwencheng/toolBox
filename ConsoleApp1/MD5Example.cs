@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace ConsoleApp1
 {
-    public class MD5Example
+    public class MD5Example : InterFace.IProgramRun
     {
         public void Run()
         {
