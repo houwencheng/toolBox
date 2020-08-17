@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.28307.421
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30320.27
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Security", "Security\Security.csproj", "{6A712D2F-0E7F-4034-A139-0C1C5683A03F}"
 EndProject
@@ -18,6 +18,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "httpFileShare", "httpFileShare\httpFileShare.csproj", "{1EA6ED10-5F74-42D2-80BE-98334BC7097F}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TimeSpanSet", "TimeSpanSet\TimeSpanSet.csproj", "{41C2FD09-452F-4511-9838-FD94595396A5}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WpfControls", "WpfControls\WpfControls.csproj", "{FC87FBFA-307C-4BA3-AA3B-46035D8A52EB}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -57,6 +59,10 @@ Global
 		{41C2FD09-452F-4511-9838-FD94595396A5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{41C2FD09-452F-4511-9838-FD94595396A5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{41C2FD09-452F-4511-9838-FD94595396A5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FC87FBFA-307C-4BA3-AA3B-46035D8A52EB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FC87FBFA-307C-4BA3-AA3B-46035D8A52EB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FC87FBFA-307C-4BA3-AA3B-46035D8A52EB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FC87FBFA-307C-4BA3-AA3B-46035D8A52EB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

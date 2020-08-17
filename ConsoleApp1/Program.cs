@@ -14,7 +14,8 @@ namespace ConsoleApp1
         static void Main(string[] args)
         {
             InterFace.IProgramRun programRun = new ThreadExample();
-            programRun = new MD5Example();
+            //programRun = new MD5Example();
+            //programRun = new CpuTestExample();
             Run(programRun);
         }
 
