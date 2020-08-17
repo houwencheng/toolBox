@@ -15,4 +15,41 @@
             </Setter.Value>
         </Setter>
     </Style>
+
+
+    <Style TargetType="{x:Type local:ImageBtn}">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type local:ImageBtn}">
+                    <Border x:Name="bd"
+                            Height="{TemplateBinding Property=Height}"
+                            Width="{TemplateBinding Property=Width}"
+                            Opacity="{TemplateBinding Property=Opacity}"
+                            BorderThickness="0"
+                            >
+                        <Border.Background>
+                            <ImageBrush ImageSource="{TemplateBinding NormalImage}"/>
+                        </Border.Background>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter Property="Background" TargetName="bd">
+                                <Setter.Value>
+                                    <ImageBrush ImageSource="{TemplateBinding FocusImage}" Stretch="Fill"/>
+                                </Setter.Value>
+                            </Setter>
+                        </Trigger>
+
+                        <Trigger Property="IsPressed" Value="True">
+                            <Setter Property="Background" TargetName="bd">
+                                <Setter.Value>
+                                    <ImageBrush ImageSource="{TemplateBinding PressImage}"/>
+                                </Setter.Value>
+                            </Setter>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
 </ResourceDictionary>
