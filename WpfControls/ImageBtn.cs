@@ -20,12 +20,6 @@ namespace WpfControls
 
         public ImageBtn()
         {
-            MouseMove += ImageBtn_MouseMove;
-        }
-
-        private void ImageBtn_MouseMove(object sender, System.Windows.Input.MouseEventArgs e)
-        {
-            //throw new NotImplementedException();
         }
 
         public string NormalImage
@@ -36,14 +30,7 @@ namespace WpfControls
 
         // Using a DependencyProperty as the backing store for NomalImage.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty NormalImageProperty =
-            DependencyProperty.Register("NormalImage", typeof(string), typeof(ImageBtn), new PropertyMetadata(null, new PropertyChangedCallback(PropertyChangedCallback)));
-
-        public static void PropertyChangedCallback(DependencyObject d, DependencyPropertyChangedEventArgs e)
-        {
-
-        }
-
-
+            DependencyProperty.Register("NormalImage", typeof(string), typeof(ImageBtn), new PropertyMetadata(null));
 
         public string FocusImage
         {

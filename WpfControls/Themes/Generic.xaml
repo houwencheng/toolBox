@@ -16,7 +16,6 @@
         </Setter>
     </Style>
 
-
     <Style TargetType="{x:Type local:ImageBtn}">
         <Setter Property="Template">
             <Setter.Value>
@@ -28,14 +27,14 @@
                             BorderThickness="0"
                             >
                         <Border.Background>
-                            <ImageBrush ImageSource="{TemplateBinding NormalImage}"/>
+                            <ImageBrush ImageSource="{Binding RelativeSource={RelativeSource Mode=TemplatedParent}, Path=NormalImage}"/>
                         </Border.Background>
                     </Border>
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsMouseOver" Value="True">
                             <Setter Property="Background" TargetName="bd">
                                 <Setter.Value>
-                                    <ImageBrush ImageSource="{TemplateBinding FocusImage}" Stretch="Fill"/>
+                                    <ImageBrush ImageSource="{Binding RelativeSource={RelativeSource Mode=TemplatedParent}, Path=FocusImage}"/>
                                 </Setter.Value>
                             </Setter>
                         </Trigger>
@@ -43,7 +42,7 @@
                         <Trigger Property="IsPressed" Value="True">
                             <Setter Property="Background" TargetName="bd">
                                 <Setter.Value>
-                                    <ImageBrush ImageSource="{TemplateBinding PressImage}"/>
+                                    <ImageBrush ImageSource="{Binding RelativeSource={RelativeSource Mode=TemplatedParent}, Path=PressImage}"/>
                                 </Setter.Value>
                             </Setter>
                         </Trigger>
