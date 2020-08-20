@@ -48,6 +48,25 @@
     <Reference Include="PresentationFramework" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="TimeSpanSet\Controls\Mark.cs" />
+    <Compile Include="TimeSpanSet\Controls\Span.cs" />
+    <Compile Include="TimeSpanSet\Controls\TimeSpanSet.xaml.cs">
+      <DependentUpon>TimeSpanSet.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="TimeSpanSet\Controls\VAlueToTimeConverter.cs" />
+    <Compile Include="Models\Level.cs" />
+    <Compile Include="Models\Path.cs" />
+    <Compile Include="DrawLineControl.xaml.cs">
+      <DependentUpon>DrawLineControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="DrawPathsControl.xaml.cs">
+      <DependentUpon>DrawPathsControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="TimeSpanSet\ViewModel\TimeSpanSetViewModel.cs" />
+    <Page Include="TimeSpanSet\Controls\TimeSpanSet.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="NoticePasswordBox.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -59,6 +78,14 @@
     <Compile Include="CustomControl1.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="DrawLineControl.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="DrawPathsControl.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ImageBtn.cs" />

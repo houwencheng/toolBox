@@ -13,10 +13,10 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace TimeSpanSet.Controls
+namespace WpfControls.TimeSpanSet.Controls
 {
     /// <summary>
-    /// TimeSpanSet.xaml 的交互逻辑
+    /// WpfControls.TimeSpanSet.xaml 的交互逻辑
     /// </summary>
     public partial class TimeSpanSet : UserControl
     {

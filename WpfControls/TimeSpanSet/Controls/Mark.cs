@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 
-namespace TimeSpanSet.Controls
+namespace WpfControls.TimeSpanSet.Controls
 {
     /// <summary>
     /// 标度

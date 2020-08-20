@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace TimeSpanSet.ViewModel
+namespace WpfControls.TimeSpanSet.ViewModel
 {
     public class TimeSpanSetViewModel : System.ComponentModel.INotifyPropertyChanged
     {

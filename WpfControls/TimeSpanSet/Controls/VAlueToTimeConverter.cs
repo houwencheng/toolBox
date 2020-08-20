@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace TimeSpanSet.Controls
+namespace WpfControls.TimeSpanSet.Controls
 {
     public class ValueToTimeConverter : System.Windows.Data.IValueConverter
     {
