@@ -48,6 +48,9 @@
     <Reference Include="PresentationFramework" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="PagerControl.xaml.cs">
+      <DependentUpon>PagerControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="TimeSpanSet\Controls\Mark.cs" />
     <Compile Include="TimeSpanSet\Controls\Span.cs" />
     <Compile Include="TimeSpanSet\Controls\TimeSpanSet.xaml.cs">
@@ -63,6 +66,10 @@
       <DependentUpon>DrawPathsControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="TimeSpanSet\ViewModel\TimeSpanSetViewModel.cs" />
+    <Page Include="PagerControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="TimeSpanSet\Controls\TimeSpanSet.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
