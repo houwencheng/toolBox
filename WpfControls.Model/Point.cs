@@ -4,14 +4,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace WpfControls.Models
+namespace WpfControls.Model
 {
     /// <summary>
-    /// 闭合框
+    /// 自定义点
     /// </summary>
-    public class Path
+    public class Point
     {
-        public Level Level { get; set; }
-        public List<System.Windows.Point> Points { get; set; }
+        public double Y { get; set; }
+        public double X { get; set; }
     }
 }

@@ -213,7 +213,7 @@ namespace WpfControls
             _points = GetPathPointList();
             //Points.Clear();
             //Points.AddRange(_points);
-            Points = _points;
+            Points = _points.Select(x => new Model.Point { X = x.X, Y = x.Y }).ToList();
             //Finished = true;
             //BuildPath();
         }
@@ -264,7 +264,7 @@ namespace WpfControls
             var lineStyle = this.FindResource("lineNormol");
             newLine.SetValue(StyleProperty, lineStyle);
             if (Path != null)
-                newLine.Stroke = Path.Level.Brush;
+                newLine.Stroke = Path.Level.Color.ToWindowsBrush();
             return newLine;
         }
 
@@ -320,7 +320,7 @@ namespace WpfControls
             Path path = new Path();
             path.Style = (Style)this.FindResource("pathStyle");
             if (Path != null)
-                path.Fill = Path.Level.Brush;
+                path.Fill = Path.Level.Color.ToWindowsBrush();
             GeometryConverter geometryConverter = new GeometryConverter();
             path.Data = (Geometry)geometryConverter.ConvertFrom(geometryString);
             path.Height = height;
@@ -333,9 +333,9 @@ namespace WpfControls
         /// 设置点列表
         /// </summary>
         /// <returns></returns>
-        private void SetPathPointList(List<Point> points)
+        private void SetPathPointList(List<Model.Point> points)
         {
-            _points = points;
+            _points = points.Select(x => new System.Windows.Point() { X = x.X, Y = x.Y }).ToList();
             ReFreshDraw();
         }
 
@@ -406,15 +406,15 @@ namespace WpfControls
         #endregion
 
 
-        public List<Point> Points
+        public List<Model.Point> Points
         {
-            get { return (List<Point>)GetValue(PointsProperty); }
+            get { return (List<Model.Point>)GetValue(PointsProperty); }
             set { SetValue(PointsProperty, value); }
         }
 
         // Using a DependencyProperty as the backing store for Points.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty PointsProperty =
-            DependencyProperty.Register("Points", typeof(List<Point>), typeof(DrawLineControl), new PropertyMetadata(null, new PropertyChangedCallback(PointsChangedCallback)));
+            DependencyProperty.Register("Points", typeof(List<Model.Point>), typeof(DrawLineControl), new PropertyMetadata(null, new PropertyChangedCallback(PointsChangedCallback)));
 
 
         private static void PointsChangedCallback(DependencyObject d, DependencyPropertyChangedEventArgs e)
@@ -426,14 +426,14 @@ namespace WpfControls
             }
             else
             {
-                var points = (List<Point>)e.NewValue;
+                var points = (List<Model.Point>)e.NewValue;
                 control.SetPathPointList(points);
             }
         }
 
-        public Models.Path Path { get; set; }
+        public Model.Path Path { get; set; }
 
-        public void SetPath(Models.Path path)
+        public void SetPath(Model.Path path)
         {
             Path = path;
             System.Windows.Data.Binding binding = new Binding();

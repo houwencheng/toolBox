@@ -3,9 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using System.Windows.Media;
 
-namespace WpfControls.Models
+namespace WpfControls.Model
 {
     /// <summary>
     /// 等级
@@ -14,7 +13,6 @@ namespace WpfControls.Models
     {
         public int Value { get; set; }
         public string Name { get; set; }
-        //[Newtonsoft.Json.JsonIgnore]
-        public Brush Brush { get; set; }
+        public Color Color { get; set; }
     }
 }

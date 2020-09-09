@@ -48,6 +48,7 @@
     <Reference Include="PresentationFramework" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ColorExtend.cs" />
     <Compile Include="PagerControl.xaml.cs">
       <DependentUpon>PagerControl.xaml</DependentUpon>
     </Compile>
@@ -57,15 +58,15 @@
       <DependentUpon>TimeSpanSet.xaml</DependentUpon>
     </Compile>
     <Compile Include="TimeSpanSet\Controls\VAlueToTimeConverter.cs" />
-    <Compile Include="Models\Level.cs" />
-    <Compile Include="Models\Path.cs" />
     <Compile Include="DrawLineControl.xaml.cs">
       <DependentUpon>DrawLineControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="DrawPathsControl.xaml.cs">
       <DependentUpon>DrawPathsControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="TimeSpanSet\ViewModel\TimeSpanSetViewModel.cs" />
+    <Compile Include="WaitingControl.xaml.cs">
+      <DependentUpon>WaitingControl.xaml</DependentUpon>
+    </Compile>
     <Page Include="PagerControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -92,6 +93,10 @@
     <Page Include="DrawPathsControl.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="WaitingControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>
   <ItemGroup>
@@ -121,6 +126,16 @@
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Models\" />
+    <Folder Include="TimeSpanSet\ViewModel\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\WpfControls.Model\WpfControls.Model.csproj">
+      <Project>{26d02b41-ea8e-4287-87bb-1fa8bb361965}</Project>
+      <Name>WpfControls.Model</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -24,16 +24,16 @@ namespace WpfControls
             InitializeComponent();
         }
 
-        public List<Models.Path> Paths
+        public List<Model.Path> Paths
         {
-            get { return (List<Models.Path>)GetValue(PathsProperty); }
+            get { return (List<Model.Path>)GetValue(PathsProperty); }
             set { SetValue(PathsProperty, value); }
         }
 
 
         // Using a DependencyProperty as the backing store for Paths.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty PathsProperty =
-            DependencyProperty.Register("Paths", typeof(List<Models.Path>), typeof(DrawPathsControl), new PropertyMetadata(null, new System.Windows.PropertyChangedCallback(PropertyChangedCallback)));
+            DependencyProperty.Register("Paths", typeof(List<Model.Path>), typeof(DrawPathsControl), new PropertyMetadata(null, new System.Windows.PropertyChangedCallback(PropertyChangedCallback)));
 
 
         public static void PropertyChangedCallback(DependencyObject d, DependencyPropertyChangedEventArgs e)
