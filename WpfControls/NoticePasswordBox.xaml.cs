@@ -25,6 +25,7 @@ namespace WpfControls
             InitializeComponent();
         }
 
+
         public string Notice
         {
             get { return (string)GetValue(NoticeProperty); }
@@ -115,6 +116,27 @@ namespace WpfControls
             {
                 SetOnNoticeState();
             }
+
+            IsFocused2 = false;
         }
+
+        private void passwordBox_GotFocus(object sender, RoutedEventArgs e)
+        {
+            IsFocused2 = true;
+        }
+
+
+
+        public bool IsFocused2
+        {
+            get { return (bool)GetValue(IsFocused2Property); }
+            set { SetValue(IsFocused2Property, value); }
+        }
+
+        // Using a DependencyProperty as the backing store for IsFocused2.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty IsFocused2Property =
+            DependencyProperty.Register("IsFocused2", typeof(bool), typeof(NoticePasswordBox), new PropertyMetadata(false));
+
+
     }
 }
