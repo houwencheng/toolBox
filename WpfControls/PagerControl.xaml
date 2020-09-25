@@ -95,20 +95,30 @@
                 </Grid>
             </Border>
         </ControlTemplate>
-
-        <Style x:Key="NumberPageBtnStyle" TargetType="Button">
-            <Setter Property="VerticalAlignment" Value="Center"/>
-            <Setter Property="Margin" Value="5,0" />
-            <Setter Property="MinWidth" Value="20" />
-            <Setter Property="BorderThickness" Value="0"/>
-            <Setter Property="Padding" Value="5,2"/>
-            <Setter Property="Background" Value="Transparent"/>
-            <Style.Triggers>
-                <DataTrigger Binding="{Binding RelativeSource={RelativeSource Self},Path=Tag}" Value="True">
-                    <Setter Property="Background" Value="{Binding RelativeSource={RelativeSource Self},Path=Foreground}"/>
-                    <Setter Property="Foreground" Value="{Binding RelativeSource={RelativeSource Self},Path=Background}"/>
-                </DataTrigger>
-            </Style.Triggers>
+        <Style x:Key="txtBtn" TargetType="Button">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}"
+                                Padding="{TemplateBinding Padding}"
+                                MinWidth="{TemplateBinding MinWidth}"
+                                x:Name="bd"
+                                Opacity="1">
+                            <ContentControl x:Name="content" Content="{TemplateBinding Button.Content}" Foreground="{TemplateBinding Foreground}"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger SourceName="bd" Property="IsMouseOver" Value="True">
+                                <Setter TargetName="bd" Property="Background" Value="{Binding   ElementName=content,Path=Foreground}"/>
+                                <Setter TargetName="content" Property="Foreground" Value="{Binding   ElementName=bd,Path=Background}"/>
+                            </Trigger>
+                            <DataTrigger Binding="{Binding RelativeSource={RelativeSource Self},Path=Tag}" Value="True">
+                                <Setter TargetName="bd" Property="Background" Value="{Binding   ElementName=content,Path=Foreground}"/>
+                                <Setter TargetName="content" Property="Foreground" Value="{Binding   ElementName=bd,Path=Background}"/>
+                            </DataTrigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
         </Style>
 
         <Style TargetType="{x:Type TextBlock}">
@@ -116,13 +126,14 @@
             <Setter Property="Foreground" Value="{Binding ElementName=UserControl,Path=Foreground}"/>
         </Style>
 
-        <Style TargetType="{x:Type Button}">
+        <Style TargetType="{x:Type Button}" BasedOn="{StaticResource txtBtn}">
             <Setter Property="Foreground" Value="{Binding ElementName=UserControl,Path=Foreground}"/>
             <Setter Property="BorderThickness" Value="0"/>
             <Setter Property="Margin" Value="5"/>
             <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="MinWidth" Value="20" />
         </Style>
-
+        
         <Style TargetType="{x:Type ComboBox}">
             <Setter Property="Foreground" Value="{Binding ElementName=UserControl,Path=Foreground}"/>
             <Setter Property="BorderThickness" Value="1"/>

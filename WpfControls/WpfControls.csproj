@@ -52,6 +52,9 @@
     <Compile Include="PagerControl.xaml.cs">
       <DependentUpon>PagerControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="PlayTimeLine.xaml.cs">
+      <DependentUpon>PlayTimeLine.xaml</DependentUpon>
+    </Compile>
     <Compile Include="TimeSpanSet\Controls\Mark.cs" />
     <Compile Include="TimeSpanSet\Controls\Span.cs" />
     <Compile Include="TimeSpanSet\Controls\TimeSpanSet.xaml.cs">
@@ -68,6 +71,10 @@
       <DependentUpon>WaitingControl.xaml</DependentUpon>
     </Compile>
     <Page Include="PagerControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="PlayTimeLine.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -136,6 +143,9 @@
       <Project>{26d02b41-ea8e-4287-87bb-1fa8bb361965}</Project>
       <Name>WpfControls.Model</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="data.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

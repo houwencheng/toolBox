@@ -184,10 +184,10 @@ namespace WpfControls
             if (existButtonCount != needButtonCount)
             {
                 var temp = new List<UIElement>();
-                var numberPageBtnStyle = (Style)this.FindResource("NumberPageBtnStyle");
+                //var numberPageBtnStyle = (Style)this.FindResource("NumberPageBtnStyle");
                 for (int i = 0; i < needButtonCount; i++)
                 {
-                    var button = new Button() { Style = numberPageBtnStyle };
+                    var button = new Button();// { Style = numberPageBtnStyle };
                     button.Click += PageBtn_Click;
                     temp.Add(button);
                 }
