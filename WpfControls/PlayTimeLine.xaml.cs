@@ -33,7 +33,7 @@ namespace WpfControls
             _playPosition = leftValue;
             UpdateMarkUnitTxt();
 
-            SimuPlay();
+            //SimuPlay();
             playBorder.MouseEnter += PlayBorder_MouseEnter;
             playBorder.MouseMove += PlayBorder_MouseMove;
             playBorder.MouseLeave += PlayBorder_MouseLeave;
@@ -430,7 +430,7 @@ namespace WpfControls
                 var format = "Num.{0}@{1}到{2}";
                 if (end < begin)
                 {
-                    format = "Num.{0}@{1}开始持续";
+                    format = "Num.{0}@{1}起一直持续";
                 }
 
                 path.ToolTip = new TextBlock { Text = string.Format(format, i, beginDateTime.ToString(timeStringFormat), endDateTime.ToString(timeStringFormat)), Foreground = path.Fill };
@@ -506,6 +506,81 @@ namespace WpfControls
 
         #endregion
 
-        
+
+        private void ChangedPlayPosition()
+        {
+            _playPosition = PlayUnixTimestamp;
+
+            var unitPixes = _markSpanPixesList[_markSpanPixesIndex];
+            var left = (_playPosition - leftValue) * ratioPixesWithValue;
+
+            if (playMarkAllowMove)
+            {
+                while (true)
+                {
+                    var gridLeft = (double)grid.GetValue(Canvas.LeftProperty);
+                    if (double.IsNaN(gridLeft)) gridLeft = 0;
+                    var hideLeft = left + gridLeft < 0;
+                    // 右预留20个单元
+                    var data = left + gridLeft - canvas.ActualWidth + unitPixes * 20;
+                    var hideRight = data > 0;
+                    if (hideRight)
+                    {
+                        var newCanvasLeft = gridLeft - data;
+                        grid.SetValue(Canvas.LeftProperty, newCanvasLeft);
+                        CheckGridBound(newCanvasLeft);
+                    }
+                    else break;
+                }
+
+                RefreshPlayMark(_playPosition - leftValue);
+            }
+        }
+
+        private void ChangedRecordTimeSpanList()
+        {
+            SetRecordTimespan(RecordTimeSpanList);
+        }
+
+        /// <summary>
+        /// 设置播放的Unix时间戳
+        /// </summary>
+        public double PlayUnixTimestamp
+        {
+            get { return (double)GetValue(PlayUnixTimeStampProperty); }
+            set { SetValue(PlayUnixTimeStampProperty, value); }
+        }
+
+        // Using a DependencyProperty as the backing store for PlayUnixTimeStamp.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty PlayUnixTimeStampProperty =
+            DependencyProperty.Register("PlayUnixTimeStamp", typeof(double), typeof(PlayTimeLine), new PropertyMetadata(0d, PlayUnixTimeStampPropertyChangedCallback));
+
+
+        public static void PlayUnixTimeStampPropertyChangedCallback(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            var control = (PlayTimeLine)d;
+            control.ChangedPlayPosition();
+        }
+
+
+
+
+        public List<double[]> RecordTimeSpanList
+        {
+            get { return (List<double[]>)GetValue(RecordTimeSpanListProperty); }
+            set { SetValue(RecordTimeSpanListProperty, value); }
+        }
+
+        // Using a DependencyProperty as the backing store for RecordTimeSpanList.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty RecordTimeSpanListProperty =
+            DependencyProperty.Register("RecordTimeSpanList", typeof(List<double[]>), typeof(PlayTimeLine), new PropertyMetadata(null, PlayUnixTimeStampPropertyChangedCallback));
+
+        public static void RecordTimeSpanListPropertyChangedCallback(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            var control = (PlayTimeLine)d;
+            control.ChangedRecordTimeSpanList();
+        }
+
+
     }
 }
