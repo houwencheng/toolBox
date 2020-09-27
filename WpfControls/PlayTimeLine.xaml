@@ -6,12 +6,27 @@
              xmlns:local="clr-namespace:WpfControls"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
+    <UserControl.Resources>
+        <Style TargetType="Control" x:Key="playLine">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Control">
+                        <Canvas Background="{TemplateBinding Background}">
+                            <TextBlock Text="{Binding}" Margin="-55,-23,0,0" Foreground="{TemplateBinding Background}"/>
+                            <Rectangle Width="20" Height="6" Fill="{TemplateBinding Background}"
+                                       Margin="-55,-17,0,0"/>
+                        </Canvas>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </UserControl.Resources>
     <Grid>
         <Canvas x:Name="canvas">
             <Grid x:Name="grid" Height="70" Background="SaddleBrown">
                 <Grid x:Name="markGrid"/>
                 <Grid x:Name="recordGrid" Height="3" Background="Transparent" VerticalAlignment="Bottom"/>
-                <Border x:Name="playBorder" Width="2" Background="Green" HorizontalAlignment="Left"/>
+                <Control x:Name="playBorder" Style="{DynamicResource playLine}" Width="2" Background="Green" HorizontalAlignment="Left"/>
             </Grid>
         </Canvas>
         <TextBlock x:Name="unitTxt" HorizontalAlignment="Right" VerticalAlignment="Top"/>

@@ -30,10 +30,65 @@ namespace WpfControls
             grid.SizeChanged += Grid_SizeChanged;
 
             leftValue = (DateTime.Now.Date.AddDays(-1) - baseTime).TotalSeconds;
-            playPosition = leftValue;
+            _playPosition = leftValue;
             UpdateMarkUnitTxt();
 
             SimuPlay();
+            playBorder.MouseEnter += PlayBorder_MouseEnter;
+            playBorder.MouseMove += PlayBorder_MouseMove;
+            playBorder.MouseLeave += PlayBorder_MouseLeave;
+            playBorder.MouseLeftButtonDown += PlayBorder_MouseLeftButtonDown;
+            playBorder.MouseLeftButtonUp += PlayBorder_MouseLeftButtonUp;
+        }
+
+        private void PlayBorder_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+        {
+            _playPosition = _playPosition2;
+            e.Handled = true;
+            playMarkAllowMove = true;
+        }
+
+        private void PlayBorder_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            _playPosition2 = _playPosition;
+            e.Handled = true;
+            playBorder.Cursor = Cursors.SizeWE;
+        }
+
+        private void PlayBorder_MouseLeave(object sender, MouseEventArgs e)
+        {
+            var mouseLeftButtonDown = e.LeftButton == MouseButtonState.Pressed;
+            if (mouseLeftButtonDown)
+            {
+                return;
+            }
+
+            playMarkAllowMove = true;
+        }
+
+        private void PlayBorder_MouseEnter(object sender, MouseEventArgs e)
+        {
+            playMarkAllowMove = false;
+        }
+
+        private bool playMarkAllowMove = false;
+        private string timeStringFormat = "yyyy-MM-dd HH:mm:ss";
+
+        private Point _mousePosition2;
+        private double _playPosition2;
+        private void PlayBorder_MouseMove(object sender, MouseEventArgs e)
+        {
+            var mousePosition = e.GetPosition(this);
+            var mouseLeftButtonDown = e.LeftButton == MouseButtonState.Pressed;
+            if (mouseLeftButtonDown)
+            {
+                var leftPixes = (mousePosition - _mousePosition2).X;
+                _playPosition2 += leftPixes / ratioPixesWithValue;
+                RefreshPlayMark(_playPosition2);
+            }
+
+            _mousePosition2 = mousePosition;
+            e.Handled = true;
         }
 
         /// <summary>
@@ -44,7 +99,7 @@ namespace WpfControls
         /// <summary>
         /// 播放位置(Unix时间戳)
         /// </summary>
-        double playPosition;
+        double _playPosition;
 
         private void Grid_MouseMove(object sender, MouseEventArgs e)
         {
@@ -56,9 +111,7 @@ namespace WpfControls
                 if (double.IsNaN(originLeft)) originLeft = 0;
                 var nowLeft = originLeft + (mousePosition - _mousePosition).X;
                 grid.SetValue(System.Windows.Controls.Canvas.LeftProperty, nowLeft);
-
-                if (nowLeft > 0) LoadLefter();
-                else if (nowLeft + grid.ActualWidth < canvas.ActualWidth) LoadRighter();
+                CheckGridBound(nowLeft);
             }
 
             _mousePosition = mousePosition;
@@ -130,10 +183,7 @@ namespace WpfControls
             var lefterWidth = widthDiff / 2;
             grid.SetValue(Canvas.LeftProperty, -lefterWidth);
 
-            var unitValue = _precisionList[_markSpanPixesIndex];
-            var unitPixes = _markSpanPixesList[_markSpanPixesIndex];
-            var ratio = unitValue / unitPixes;
-            leftValue -= lefterWidth * ratio;
+            leftValue -= lefterWidth / ratioPixesWithValue;
 
             Refresh();
         }
@@ -147,10 +197,7 @@ namespace WpfControls
             // 相右加载的宽度
             var righterWidth = widthDiff / 2;
             grid.SetValue(Canvas.LeftProperty, -righterWidth);
-            var unitValue = _precisionList[_markSpanPixesIndex];
-            var unitPixes = _markSpanPixesList[_markSpanPixesIndex];
-            var ratio = unitValue / unitPixes;
-            leftValue += righterWidth * ratio;
+            leftValue += righterWidth / ratioPixesWithValue;
             Refresh();
         }
 
@@ -172,31 +219,67 @@ namespace WpfControls
         /// </summary>
         List<double> _precisionList = new List<double> {
             1,
+            30,
             60,
-            5 * 60,
-            10 * 60,
-            30 * 60,
-            60 * 60,
-            2* 60 * 60};
+            5*60,
+            10*60,
+            30*60,
+            60*60,
+            2*60*60,
+            6*60*60,
+            12*60*60,
+            24*60*60,
+            7*24*60*60,
+            30*24*60*60,
+            12*30*24*60*60};
+        List<string> _precisionListName = new List<string> {
+            "1秒",
+            "30秒",
+            "1分",
+            "5分",
+            "10分",
+            "30分",
+            "1小时",
+            "2小时",
+            "6小时",
+            "12小时",
+            "1天",
+            "1周",
+            "1月",
+            "1年"};
         /// <summary>
         /// 单位刻度像素宽度列表
         /// </summary>
-        List<double> _markSpanPixesList = new List<double> { 3, 5, 7, 9, 10, 13 };
+        List<double> _markSpanPixesList = new List<double> { 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16 };
 
         /// <summary>
         /// 使用的刻度下标
         /// </summary>
-        int _markSpanPixesIndex = 2;
+        int _markSpanPixesIndex = 0;
 
         /// <summary>
         /// 等级列表
         /// </summary>
-        private List<double> _levelList = new List<double> { 1, 2, 4, 8 };
+        private List<double> _levelList = new List<double> { 1, 2, 4, 8, 16 };
 
         /// <summary>
         /// 总的刻度数
         /// </summary>
         private int markCount;
+
+        /// <summary>
+        /// 像素和值的比率
+        /// </summary>
+        private double ratioPixesWithValue
+        {
+            get
+            {
+                var unitValue = _precisionList[_markSpanPixesIndex];
+                var unitPixes = _markSpanPixesList[_markSpanPixesIndex];
+                var ratio = unitPixes / unitValue;
+                return ratio;
+            }
+        }
 
 
 
@@ -265,7 +348,7 @@ namespace WpfControls
                 var markValue = leftValue + _precisionList[_markSpanPixesIndex] * i;
                 var markDateTime = baseTime.AddSeconds(markValue);
                 path.DataContext = markDateTime;
-                path.ToolTip = new TextBlock { Text = string.Format("Num.{0}@{1}", i, markDateTime), Foreground = path.Stroke };
+                path.ToolTip = new TextBlock { Text = string.Format("Num.{0}@{1}", i, markDateTime.ToString(timeStringFormat)), Foreground = path.Stroke };
                 markGrid.Children.Add(path);
             }
         }
@@ -275,7 +358,10 @@ namespace WpfControls
         /// </summary>
         private void UpdateMarkUnitTxt()
         {
-            unitTxt.Text = string.Format("{0}秒", _precisionList[_markSpanPixesIndex]);
+            var text = _precisionListName[_markSpanPixesIndex];
+            if (text.Contains("月") || text.Contains("年"))
+                text = string.Format("约{0}", text);
+            unitTxt.Text = text;
         }
 
         #endregion
@@ -309,19 +395,17 @@ namespace WpfControls
             var height = recordGrid.ActualHeight;
             var maxWidth = recordGrid.ActualWidth;
 
-            var unitValue = _precisionList[_markSpanPixesIndex];
-            var unitPixes = _markSpanPixesList[_markSpanPixesIndex];
-            var ratio = unitPixes / unitValue;
+
             for (int i = 0; i < _recordTimeSpan.Count; i++)
             {
                 var record = _recordTimeSpan[i];
                 var begin = record[0];
-                x = (begin - leftValue) * ratio;
+                x = (begin - leftValue) * ratioPixesWithValue;
 
                 var end = record[1];
                 if (end > begin)
                 {
-                    width = (end - begin) * ratio;
+                    width = (end - begin) * ratioPixesWithValue;
                 }
                 else
                 {
@@ -337,6 +421,15 @@ namespace WpfControls
                 Path path = new Path();
                 path.Fill = Brushes.Green;
                 path.Data = rectangleGeometry;
+                var beginDateTime = baseTime.AddSeconds(begin);
+                var endDateTime = baseTime.AddSeconds(end);
+                var format = "Num.{0}@{1}到{2}";
+                if (end < begin)
+                {
+                    format = "Num.{0}@{1}开始持续";
+                }
+
+                path.ToolTip = new TextBlock { Text = string.Format(format, i, beginDateTime.ToString(timeStringFormat), endDateTime.ToString(timeStringFormat)), Foreground = path.Fill };
                 recordGrid.Children.Add(path);
             }
         }
@@ -355,19 +448,60 @@ namespace WpfControls
                 var times = 1;
                 while (times++ < 60 * 60)
                 {
-                    System.Threading.Thread.Sleep(1000);
-                    playPosition++;
+                    System.Threading.Thread.Sleep(100);
+                    _playPosition++;
                     Dispatcher.Invoke(() =>
                     {
-                        var left = times * _markSpanPixesList[_markSpanPixesIndex] / _precisionList[_markSpanPixesIndex];
-                        playBorder.Margin = new Thickness { Left = left };
-                        var playDateTime = baseTime.AddSeconds(playPosition);
-                        playBorder.DataContext = playDateTime;
-                        playBorder.ToolTip = new TextBlock { Text = string.Format("Num.{0}@{1}", times, playDateTime), Foreground = playBorder.Background };
+                        var unitPixes = _markSpanPixesList[_markSpanPixesIndex];
+                        var left = (_playPosition - leftValue) * ratioPixesWithValue;
+
+                        if (playMarkAllowMove)
+                        {
+                            var gridLeft = (double)grid.GetValue(Canvas.LeftProperty);
+                            if (double.IsNaN(gridLeft)) gridLeft = 0;
+                            var hideLeft = left + gridLeft < 0;
+                            // 右预留20个单元
+                            var data = left + gridLeft - canvas.ActualWidth + unitPixes * 20;
+                            var hideRight = data > 0;
+                            if (hideRight)
+                            {
+                                var newCanvasLeft = gridLeft - data;
+                                grid.SetValue(Canvas.LeftProperty, newCanvasLeft);
+                                CheckGridBound(newCanvasLeft);
+                            }
+
+                            RefreshPlayMark(left);
+                        }
                     });
                 }
             });
         }
+
+        /// <summary>
+        /// 刷新播放刻度
+        /// </summary>
+        /// <param name="left"></param>
+        private void RefreshPlayMark(double playPosition)
+        {
+            var leftPixes = playPosition * ratioPixesWithValue;
+            playBorder.Margin = new Thickness { Left = leftPixes };
+
+            var playDateTime = baseTime.AddSeconds(playPosition);
+            playBorder.DataContext = playDateTime;
+            playBorder.ToolTip = new TextBlock { Text = string.Format("@{0}", playDateTime.ToString(timeStringFormat)), Foreground = playBorder.Background };
+        }
+
+        /// <summary>
+        /// 检查grid边界
+        /// </summary>
+        /// <param name="newCanvasLeft"></param>
+        private void CheckGridBound(double newCanvasLeft)
+        {
+            if (newCanvasLeft > 0) LoadLefter();
+            else if (newCanvasLeft + grid.ActualWidth < canvas.ActualWidth) LoadRighter();
+        }
+
+
         #endregion
     }
 }
