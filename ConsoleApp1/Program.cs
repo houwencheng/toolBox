@@ -13,15 +13,33 @@ namespace ConsoleApp1
         [MTAThread]
         static void Main(string[] args)
         {
-            InterFace.IProgramRun programRun = new ThreadExample();
-            //programRun = new MD5Example();
-            //programRun = new CpuTestExample();
-            Run(programRun);
+            //InterFace.IProgramRun programRun = new ThreadExample();
+            ////programRun = new MD5Example();
+            ////programRun = new CpuTestExample();
+            //programRun.Run();
+
+            //WpfApp wpfApp = new WpfApp();
+            //wpfApp.Run();
+            var thread = new System.Threading.Thread(new System.Threading.ThreadStart(() =>
+            {
+                //System.Windows.Window window = new System.Windows.Window();
+                //window.Content = new WpfControls.PlayTimeLine();
+                //window.Closed += Window_Closed;
+                //window.ShowDialog();
+
+                WpfApp wpfApp = new WpfApp();
+                wpfApp.Run();
+            }));
+
+            thread.SetApartmentState(System.Threading.ApartmentState.STA);
+            thread.Start();
+
+            Console.Read();
         }
 
-        static void Run<T>(T programRun) where T : InterFace.IProgramRun
+        private static void Window_Closed(object sender, EventArgs e)
         {
-            programRun.Run();
+            throw new NotImplementedException();
         }
     }
 }
