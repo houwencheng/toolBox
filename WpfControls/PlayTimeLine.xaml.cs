@@ -43,26 +43,29 @@ namespace WpfControls
 
         private void PlayBorder_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
-            _playPosition = _playPosition2;
-            e.Handled = true;
-            playMarkAllowMove = true;
+            if (IsMouseLeftButtonDown)
+            {
+                _playPosition = _playPosition2;
+                playMarkAllowMove = true;
+                playBorder.Cursor = Cursors.Arrow;
+                e.Handled = true;
+                IsMouseLeftButtonDown = false;
+            }
         }
+        private bool IsMouseLeftButtonDown = false;
 
         private void PlayBorder_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
+            IsMouseLeftButtonDown = true;
+            playMarkAllowMove = false;
+            _mousePosition2 = e.GetPosition(this);
             _playPosition2 = _playPosition;
-            e.Handled = true;
             playBorder.Cursor = Cursors.SizeWE;
+            e.Handled = true;
         }
 
         private void PlayBorder_MouseLeave(object sender, MouseEventArgs e)
         {
-            var mouseLeftButtonDown = e.LeftButton == MouseButtonState.Pressed;
-            if (mouseLeftButtonDown)
-            {
-                return;
-            }
-
             playMarkAllowMove = true;
         }
 
@@ -71,24 +74,25 @@ namespace WpfControls
             playMarkAllowMove = false;
         }
 
-        private bool playMarkAllowMove = false;
+        private bool playMarkAllowMove = true;
         private string timeStringFormat = "yyyy-MM-dd HH:mm:ss";
 
         private Point _mousePosition2;
         private double _playPosition2;
         private void PlayBorder_MouseMove(object sender, MouseEventArgs e)
         {
+            e.Handled = true;
             var mousePosition = e.GetPosition(this);
             var mouseLeftButtonDown = e.LeftButton == MouseButtonState.Pressed;
             if (mouseLeftButtonDown)
             {
                 var leftPixes = (mousePosition - _mousePosition2).X;
+                if (leftPixes == 0) return;
                 _playPosition2 += leftPixes / ratioPixesWithValue;
-                RefreshPlayMark(_playPosition2);
+                RefreshPlayMark(_playPosition2 - leftValue);
+                _mousePosition2 = mousePosition;
             }
 
-            _mousePosition2 = mousePosition;
-            e.Handled = true;
         }
 
         /// <summary>
@@ -448,7 +452,7 @@ namespace WpfControls
                 var times = 1;
                 while (times++ < 60 * 60)
                 {
-                    System.Threading.Thread.Sleep(100);
+                    System.Threading.Thread.Sleep(1000);
                     _playPosition++;
                     Dispatcher.Invoke(() =>
                     {
@@ -470,7 +474,7 @@ namespace WpfControls
                                 CheckGridBound(newCanvasLeft);
                             }
 
-                            RefreshPlayMark(left);
+                            RefreshPlayMark(_playPosition - leftValue);
                         }
                     });
                 }
@@ -484,11 +488,9 @@ namespace WpfControls
         private void RefreshPlayMark(double playPosition)
         {
             var leftPixes = playPosition * ratioPixesWithValue;
+            var playDateTime = baseTime.AddSeconds(playPosition + leftValue);
             playBorder.Margin = new Thickness { Left = leftPixes };
-
-            var playDateTime = baseTime.AddSeconds(playPosition);
-            playBorder.DataContext = playDateTime;
-            playBorder.ToolTip = new TextBlock { Text = string.Format("@{0}", playDateTime.ToString(timeStringFormat)), Foreground = playBorder.Background };
+            playBorder.DataContext = playDateTime.ToString(timeStringFormat);
         }
 
         /// <summary>
@@ -503,5 +505,7 @@ namespace WpfControls
 
 
         #endregion
+
+        
     }
 }

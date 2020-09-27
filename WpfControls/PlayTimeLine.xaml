@@ -13,8 +13,8 @@
                     <ControlTemplate TargetType="Control">
                         <Canvas Background="{TemplateBinding Background}">
                             <TextBlock Text="{Binding}" Margin="-55,-23,0,0" Foreground="{TemplateBinding Background}"/>
-                            <Rectangle Width="20" Height="6" Fill="{TemplateBinding Background}"
-                                       Margin="-55,-17,0,0"/>
+                            <Rectangle Width="21" Height="5" Fill="{TemplateBinding Background}"
+                                       Margin="-10,-5,0,0"/>
                         </Canvas>
                     </ControlTemplate>
                 </Setter.Value>
