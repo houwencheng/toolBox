@@ -20,10 +20,20 @@
                 </Setter.Value>
             </Setter>
         </Style>
+        
+        <Style TargetType="ToolTip">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="ToolTip">
+                        <TextBlock Text="{Binding}"/>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
     </UserControl.Resources>
     <Grid>
         <Canvas x:Name="canvas">
-            <Grid x:Name="grid" Height="70" Background="SaddleBrown">
+            <Grid x:Name="grid" Height="40" Background="Transparent">
                 <Grid x:Name="markGrid"/>
                 <Grid x:Name="recordGrid" Height="3" Background="Transparent" VerticalAlignment="Bottom"/>
                 <Control x:Name="playBorder" Style="{DynamicResource playLine}" Width="2" Background="Green" HorizontalAlignment="Left"/>

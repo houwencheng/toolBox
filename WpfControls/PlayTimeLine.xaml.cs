@@ -50,6 +50,7 @@ namespace WpfControls
                 playBorder.Cursor = Cursors.Arrow;
                 e.Handled = true;
                 IsMouseLeftButtonDown = false;
+                PlayUnixTimestamp = _playPosition;
             }
         }
         private bool IsMouseLeftButtonDown = false;
@@ -348,11 +349,11 @@ namespace WpfControls
                 Path path = new Path();
                 path.StrokeThickness = 1;
                 path.Data = lineGeometry;
-                path.Stroke = Brushes.Black;
+                path.Stroke = this.Foreground;
                 var markValue = leftValue + _precisionList[_markSpanPixesIndex] * i;
                 var markDateTime = baseTime.AddSeconds(markValue);
                 path.DataContext = markDateTime;
-                path.ToolTip = new TextBlock { Text = string.Format("Num.{0}@{1}", i, markDateTime.ToString(timeStringFormat)), Foreground = path.Stroke };
+                path.ToolTip = string.Format("Num.{0}@{1}", i, markDateTime.ToString(timeStringFormat));
                 markGrid.Children.Add(path);
             }
         }
@@ -433,7 +434,7 @@ namespace WpfControls
                     format = "Num.{0}@{1}起一直持续";
                 }
 
-                path.ToolTip = new TextBlock { Text = string.Format(format, i, beginDateTime.ToString(timeStringFormat), endDateTime.ToString(timeStringFormat)), Foreground = path.Fill };
+                path.ToolTip = string.Format(format, i, beginDateTime.ToString(timeStringFormat), endDateTime.ToString(timeStringFormat));
                 recordGrid.Children.Add(path);
             }
         }
@@ -510,14 +511,14 @@ namespace WpfControls
         private void ChangedPlayPosition()
         {
             _playPosition = PlayUnixTimestamp;
-
+            //leftValue = PlayUnixTimestamp;
             var unitPixes = _markSpanPixesList[_markSpanPixesIndex];
-            var left = (_playPosition - leftValue) * ratioPixesWithValue;
 
             if (playMarkAllowMove)
             {
                 while (true)
                 {
+                    var left = (_playPosition - leftValue) * ratioPixesWithValue;
                     var gridLeft = (double)grid.GetValue(Canvas.LeftProperty);
                     if (double.IsNaN(gridLeft)) gridLeft = 0;
                     var hideLeft = left + gridLeft < 0;
@@ -547,13 +548,13 @@ namespace WpfControls
         /// </summary>
         public double PlayUnixTimestamp
         {
-            get { return (double)GetValue(PlayUnixTimeStampProperty); }
-            set { SetValue(PlayUnixTimeStampProperty, value); }
+            get { return (double)GetValue(PlayUnixTimestampProperty); }
+            set { SetValue(PlayUnixTimestampProperty, value); }
         }
 
         // Using a DependencyProperty as the backing store for PlayUnixTimeStamp.  This enables animation, styling, binding, etc...
-        public static readonly DependencyProperty PlayUnixTimeStampProperty =
-            DependencyProperty.Register("PlayUnixTimeStamp", typeof(double), typeof(PlayTimeLine), new PropertyMetadata(0d, PlayUnixTimeStampPropertyChangedCallback));
+        public static readonly DependencyProperty PlayUnixTimestampProperty =
+            DependencyProperty.Register("PlayUnixTimestamp", typeof(double), typeof(PlayTimeLine), new PropertyMetadata(0d, PlayUnixTimeStampPropertyChangedCallback));
 
 
         public static void PlayUnixTimeStampPropertyChangedCallback(DependencyObject d, DependencyPropertyChangedEventArgs e)
@@ -573,7 +574,7 @@ namespace WpfControls
 
         // Using a DependencyProperty as the backing store for RecordTimeSpanList.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty RecordTimeSpanListProperty =
-            DependencyProperty.Register("RecordTimeSpanList", typeof(List<double[]>), typeof(PlayTimeLine), new PropertyMetadata(null, PlayUnixTimeStampPropertyChangedCallback));
+            DependencyProperty.Register("RecordTimeSpanList", typeof(List<double[]>), typeof(PlayTimeLine), new PropertyMetadata(null, RecordTimeSpanListPropertyChangedCallback));
 
         public static void RecordTimeSpanListPropertyChangedCallback(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
