@@ -434,6 +434,7 @@ namespace WpfControls
                     format = "Num.{0}@{1}起一直持续";
                 }
 
+                path.DataContext = record;
                 path.ToolTip = string.Format(format, i, beginDateTime.ToString(timeStringFormat), endDateTime.ToString(timeStringFormat));
                 recordGrid.Children.Add(path);
             }

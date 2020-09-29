@@ -25,7 +25,7 @@
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="ToolTip">
-                        <TextBlock Text="{Binding}"/>
+                        <TextBlock Text="{TemplateBinding ToolTip.Content}"/>
                     </ControlTemplate>
                 </Setter.Value>
             </Setter>
