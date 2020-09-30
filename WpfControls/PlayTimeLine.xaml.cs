@@ -512,8 +512,23 @@ namespace WpfControls
         private void ChangedPlayPosition()
         {
             _playPosition = PlayUnixTimestamp;
-            //leftValue = PlayUnixTimestamp;
+
             var unitPixes = _markSpanPixesList[_markSpanPixesIndex];
+            // 左，右预留20个单元
+            var playMargin = unitPixes * 20;
+            var playMarginValue = playMargin / ratioPixesWithValue;
+
+            if (_playPosition < leftValue)
+            {
+                leftValue = _playPosition - playMarginValue;
+                grid.SetValue(Canvas.LeftProperty, 0d);
+            }
+            else if (_playPosition > leftValue + grid.ActualWidth / ratioPixesWithValue)
+            {
+                leftValue = _playPosition - grid.ActualWidth / ratioPixesWithValue + playMarginValue;
+                grid.SetValue(Canvas.LeftProperty, grid.ActualWidth - canvas.ActualWidth);
+            }
+
 
             if (playMarkAllowMove)
             {
@@ -523,8 +538,12 @@ namespace WpfControls
                     var gridLeft = (double)grid.GetValue(Canvas.LeftProperty);
                     if (double.IsNaN(gridLeft)) gridLeft = 0;
                     var hideLeft = left + gridLeft < 0;
-                    // 右预留20个单元
-                    var data = left + gridLeft - canvas.ActualWidth + unitPixes * 20;
+                    if (hideLeft)
+                    {
+                    }
+
+
+                    var data = left + gridLeft - canvas.ActualWidth + playMargin;
                     var hideRight = data > 0;
                     if (hideRight)
                     {
