@@ -353,7 +353,7 @@ namespace WpfControls
                 var markValue = leftValue + _precisionList[_markSpanPixesIndex] * i;
                 var markDateTime = baseTime.AddSeconds(markValue);
                 path.DataContext = markDateTime;
-                path.ToolTip = string.Format("Num.{0}@{1}", i, markDateTime.ToString(timeStringFormat));
+                path.ToolTip = string.Format("{1}", i, markDateTime.ToString(timeStringFormat));
                 markGrid.Children.Add(path);
             }
         }
@@ -428,10 +428,10 @@ namespace WpfControls
                 path.Data = rectangleGeometry;
                 var beginDateTime = baseTime.AddSeconds(begin);
                 var endDateTime = baseTime.AddSeconds(end);
-                var format = "Num.{0}@{1}到{2}";
+                var format = "{1}到{2}";
                 if (end < begin)
                 {
-                    format = "Num.{0}@{1}起一直持续";
+                    format = "{1}起一直持续";
                 }
 
                 path.DataContext = record;
@@ -493,6 +493,7 @@ namespace WpfControls
             var playDateTime = baseTime.AddSeconds(playPosition + leftValue);
             playBorder.Margin = new Thickness { Left = leftPixes };
             playBorder.DataContext = playDateTime.ToString(timeStringFormat);
+            playBorder.Visibility = Visibility.Visible;
         }
 
         /// <summary>

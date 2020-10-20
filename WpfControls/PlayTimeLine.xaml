@@ -36,7 +36,7 @@
             <Grid x:Name="grid" Height="40" Background="Transparent">
                 <Grid x:Name="markGrid"/>
                 <Grid x:Name="recordGrid" Height="3" Background="Transparent" VerticalAlignment="Bottom"/>
-                <Control x:Name="playBorder" Style="{DynamicResource playLine}" Width="2" Background="Green" HorizontalAlignment="Left"/>
+                <Control x:Name="playBorder" Style="{DynamicResource playLine}" Width="2" Background="Green" HorizontalAlignment="Left" Visibility="Hidden"/>
             </Grid>
         </Canvas>
         <TextBlock x:Name="unitTxt" HorizontalAlignment="Right" VerticalAlignment="Top"/>
