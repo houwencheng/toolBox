@@ -14,8 +14,12 @@ namespace WpfControls
     /// </summary>
     public class NoticeTextBox : System.Windows.Controls.TextBox
     {
-        Brush foreground;
         bool isOnNoticeState = false;
+
+        //static NoticeTextBox()
+        //{
+        //    DefaultStyleKeyProperty.OverrideMetadata(typeof(NoticeTextBox), new FrameworkPropertyMetadata(typeof(NoticeTextBox)));
+        //}
 
         public NoticeTextBox()
         {
@@ -69,14 +73,28 @@ namespace WpfControls
         /// </summary>
         private void SetOnNoticeState()
         {
-            var color = (Color)ColorConverter.ConvertFromString("#C6CBD1");
-            if (foreground == null)
-                foreground = Foreground;
-            Foreground = new SolidColorBrush(color);
+            SetForegroundOpacity(0.3);
+
             TextChanged -= NoticeTextBox_TextChanged;
             Text = Notice;
             TextChanged += NoticeTextBox_TextChanged;
             isOnNoticeState = true;
+        }
+
+        private void SetForegroundOpacity(double opacity)
+        {
+            if (Foreground.IsFrozen)
+            {
+                var sd = Foreground as SolidColorBrush;
+                Color c = sd.Color;
+                SolidColorBrush newBrush = new SolidColorBrush(c);
+                newBrush.Opacity = opacity;
+                Foreground = newBrush;
+            }
+            else
+            {
+                Foreground.Opacity = opacity;
+            }
         }
 
         /// <summary>
@@ -99,7 +117,7 @@ namespace WpfControls
         /// </summary>
         private void SetOnNomalState()
         {
-            Foreground = foreground;
+            SetForegroundOpacity(1);
             isOnNoticeState = false;
         }
 
