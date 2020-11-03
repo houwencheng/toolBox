@@ -40,6 +40,7 @@ namespace WpfControls
         {
             var control = (DrawPathsControl)d;
             control.RefreshPath();
+            control.AddOneAdditionPath();
         }
 
         /// <summary>
@@ -52,15 +53,53 @@ namespace WpfControls
             var existPath = Paths != null && Paths.Count > 0;
             if (!existPath) return;
 
-
             foreach (var item in Paths)
             {
-                DrawLineControl control = new DrawLineControl();
+                var control = BuildDrawLineControl(item);
                 grid.Children.Add(control);
-                control.SetPath(item);
             }
-
         }
 
+        private DrawLineControl BuildDrawLineControl(Model.Path item)
+        {
+            DrawLineControl control = new DrawLineControl();
+            control.SetPath(item);
+            control.FinishedEvent += ControlAddition_FinishedEvent;
+            control.ClearedEvent += ControlAddition_ClearedEvent;
+            control.MouseLeftClickEvent += Control_MouseLeftClickEvent;
+            return control;
+        }
+
+        /// <summary>
+        /// 添加一个额外的path
+        /// </summary>
+        public void AddOneAdditionPath()
+        {
+            if (Paths == null) Paths = new List<Model.Path>();
+
+            var additionPath = new Model.Path { Level = new Model.Level { Name = "新区域" } };
+            Paths.Insert(0, additionPath);
+            var additionControl = BuildDrawLineControl(additionPath);
+            grid.Children.Insert(0, additionControl);
+        }
+
+        private void ControlAddition_ClearedEvent(DrawLineControl drawLineControl)
+        {
+            if (grid.Children.IndexOf(drawLineControl) == 0) return;
+            grid.Children.Remove(drawLineControl);
+            Paths.Remove(drawLineControl.Path);
+        }
+
+        private void ControlAddition_FinishedEvent(DrawLineControl drawLineControl)
+        {
+            AddOneAdditionPath();
+        }
+
+        private void Control_MouseLeftClickEvent(object sender, MouseButtonEventArgs e)
+        {
+            DrawLineControl control = (DrawLineControl)((Grid)((Canvas)sender).Parent).Parent;
+            var points = control.Points;
+            //throw new NotImplementedException();
+        }
     }
 }

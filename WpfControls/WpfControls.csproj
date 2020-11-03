@@ -69,6 +69,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ColorExtend.cs" />
+    <Compile Include="EditableTextBlack.xaml.cs">
+      <DependentUpon>EditableTextBlack.xaml</DependentUpon>
+    </Compile>
     <Compile Include="PagerControl.xaml.cs">
       <DependentUpon>PagerControl.xaml</DependentUpon>
     </Compile>
@@ -90,6 +93,10 @@
     <Compile Include="WaitingControl.xaml.cs">
       <DependentUpon>WaitingControl.xaml</DependentUpon>
     </Compile>
+    <Page Include="EditableTextBlack.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="PagerControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

@@ -28,11 +28,12 @@
                 KeyUp="Canvas_KeyUp"
                 MouseRightButtonDown="Canvas_MouseRightButtonDown"
                 SizeChanged="canvas_SizeChanged"
-                Background="Transparent"
                 >
+            <!--Background="Transparent"-->
             <!--<Canvas.Background>
                 <ImageBrush ImageSource="../test.png"/>
             </Canvas.Background>-->
         </Canvas>
+        <local:EditableTextBlack x:Name="tb" Visibility="Hidden" VerticalAlignment="Top" HorizontalAlignment="Left"/>
     </Grid>
 </UserControl>

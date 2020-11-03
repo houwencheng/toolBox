@@ -13,6 +13,11 @@ namespace WpfControls
     {
         public static System.Windows.Media.Brush ToWindowsBrush(this Model.Color color)
         {
+            if (color == null)
+            {
+                return new System.Windows.Media.SolidColorBrush(System.Windows.Media.Colors.Red);
+            }
+
             var color1 = (System.Windows.Media.Color)System.Windows.Media.ColorConverter.ConvertFromString(color.HexRGB);
             System.Windows.Media.Brush brush = new System.Windows.Media.SolidColorBrush(color1);
             return brush;

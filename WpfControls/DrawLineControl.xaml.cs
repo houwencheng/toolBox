@@ -199,6 +199,7 @@ namespace WpfControls
                     if (Finished)
                     {
                         FinishDraw();
+                        OnFinishedEvent();
                     }
                 }
             }
@@ -252,6 +253,7 @@ namespace WpfControls
             _points.Clear();
             ReFreshDraw();
             //Finished = false;
+            OnClearedEvent();
         }
 
         /// <summary>
@@ -400,7 +402,65 @@ namespace WpfControls
                 canvas.Children.Add(drawingLine);
             }
 
-            if (Finished) BuildPath();
+            if (Finished)
+            {
+                BuildPath();
+                UpdateText();
+            }
+
+        }
+
+        /// <summary>
+        /// 触发完成事件
+        /// </summary>
+        private void OnFinishedEvent()
+        {
+            canvas.Background = null;
+            if (FinishedEvent != null)
+                FinishedEvent(this);
+        }
+
+        /// <summary>
+        /// 更新区域文本框
+        /// </summary>
+        private void UpdateText()
+        {
+            if (Points == null)
+            {
+                tb.Visibility = Visibility.Hidden;
+                return;
+            }
+
+            tb.Visibility = Visibility.Visible;
+
+            var leftMin = 1.0;
+            var leftMax = 0.0;
+            var topMin = 1.0;
+            var topMax = 0.0;
+
+            Points.ForEach(x =>
+            {
+                if (x.X < leftMin) leftMin = x.X;
+                if (x.X > leftMax) leftMax = x.X;
+
+                if (x.Y < topMin) topMin = x.Y;
+                if (x.Y > topMax) topMax = x.Y;
+            });
+
+            var left = 0.0;
+            var top = 0.0;
+            left = (leftMin + leftMax) / 2;
+            top = (topMin + topMax) / 2;
+            tb.Margin = new Thickness { Left = left * canvas.ActualWidth, Top = top * canvas.ActualHeight };
+        }
+
+        /// <summary>
+        /// 触发清除事件
+        /// </summary>
+        private void OnClearedEvent()
+        {
+            if (ClearedEvent != null)
+                ClearedEvent(this);
         }
 
         #endregion
@@ -441,7 +501,18 @@ namespace WpfControls
             binding.Path = new PropertyPath("Points");
             binding.Mode = BindingMode.TwoWay;
             BindingOperations.SetBinding(this, DrawLineControl.PointsProperty, binding);
+
+            System.Windows.Data.Binding binding2 = new Binding();
+            binding2.Source = Path;
+            binding2.Path = new PropertyPath("Level.Name");
+            binding2.Mode = BindingMode.TwoWay;
+            BindingOperations.SetBinding(tb, EditableTextBlack.TextProperty, binding2);
+
+            if (path.Points == null)
+                canvas.Background = new SolidColorBrush(System.Windows.Media.Colors.Transparent);
         }
 
+        public event Action<DrawLineControl> FinishedEvent;
+        public event Action<DrawLineControl> ClearedEvent;
     }
 }
