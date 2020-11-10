@@ -266,7 +266,7 @@ namespace WpfControls
             var lineStyle = this.FindResource("lineNormol");
             newLine.SetValue(StyleProperty, lineStyle);
             if (Path != null)
-                newLine.Stroke = Path.Level.Color.ToWindowsBrush();
+                newLine.Stroke = Path.Color.ToWindowsBrush();
             return newLine;
         }
 
@@ -322,7 +322,7 @@ namespace WpfControls
             Path path = new Path();
             path.Style = (Style)this.FindResource("pathStyle");
             if (Path != null)
-                path.Fill = Path.Level.Color.ToWindowsBrush();
+                path.Fill = Path.Color.ToWindowsBrush();
             GeometryConverter geometryConverter = new GeometryConverter();
             path.Data = (Geometry)geometryConverter.ConvertFrom(geometryString);
             path.Height = height;
@@ -504,7 +504,7 @@ namespace WpfControls
 
             System.Windows.Data.Binding binding2 = new Binding();
             binding2.Source = Path;
-            binding2.Path = new PropertyPath("Level.Name");
+            binding2.Path = new PropertyPath("Name");
             binding2.Mode = BindingMode.TwoWay;
             BindingOperations.SetBinding(tb, EditableTextBlack.TextProperty, binding2);
 

@@ -11,7 +11,8 @@ namespace WpfControls.Model
     /// </summary>
     public class Path
     {
-        public Level Level { get; set; }
         public List<Point> Points { get; set; }
+        public string Name { get; set; }
+        public Color Color { get; set; }
     }
 }

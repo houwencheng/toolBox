@@ -77,7 +77,7 @@ namespace WpfControls
         {
             if (Paths == null) Paths = new List<Model.Path>();
 
-            var additionPath = new Model.Path { Level = new Model.Level { Name = "新区域" } };
+            var additionPath = new Model.Path { Name = "新区域"};
             Paths.Insert(0, additionPath);
             var additionControl = BuildDrawLineControl(additionPath);
             grid.Children.Insert(0, additionControl);
