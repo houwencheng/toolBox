@@ -120,12 +120,27 @@ namespace Tool
             {
                 using (var http = new HttpClient(handler))
                 {
-                    if (token != null) http.DefaultRequestHeaders.Add("access-token", token);
+                    if (token != null)
+                    {
+                        http.DefaultRequestHeaders.Add("access-token", token);
+                        http.DefaultRequestHeaders.Add("Authorization", token);
+                    }
+
                     using (var content = new MultipartFormDataContent())
                     {
                         var fileContent = new StreamContent(fileStream);
                         var fileName = Path.GetFileName(fileFullName);
-                        fileContent.Headers.ContentDisposition = new ContentDispositionHeaderValue("attachment") { FileName = fileName };
+                        fileContent.Headers.ContentDisposition
+                               = new ContentDispositionHeaderValue("form-data")
+                               {
+                                   FileName = fileName,
+                                   Name = "file"
+                               };
+                        //= new ContentDispositionHeaderValue("attachment")
+                        //{
+                        //    FileName = fileName,
+                        //    Name = "file"
+                        //};
                         content.Add(fileContent);
                         var request = http.PostAsync(url, content);
                         var response = request.Result;
