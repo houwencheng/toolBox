@@ -28,6 +28,8 @@ namespace WpfControls
             grid.MouseMove += Grid_MouseMove;
             grid.MouseWheel += Grid_MouseWheel;
             grid.SizeChanged += Grid_SizeChanged;
+            grid.MouseLeftButtonDown += Grid_MouseLeftButtonDown;
+            grid.MouseLeftButtonUp += Grid_MouseLeftButtonUp;
 
             leftValue = (DateTime.Now.Date.AddDays(-1) - baseTime).TotalSeconds;
             _playPosition = leftValue;
@@ -41,24 +43,37 @@ namespace WpfControls
             playBorder.MouseLeftButtonUp += PlayBorder_MouseLeftButtonUp;
         }
 
+        private bool isDragGrid = false;
+
+        private void Grid_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            isDragGrid = true;
+        }
+
+        private void Grid_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+        {
+            isDragGrid = false;
+        }
+
         private void PlayBorder_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
-            if (IsMouseLeftButtonDown)
+            if (isDragPlay)
             {
                 _playPosition = _playPosition2;
-                playMarkAllowMove = true;
                 playBorder.Cursor = Cursors.Arrow;
                 e.Handled = true;
-                IsMouseLeftButtonDown = false;
                 PlayUnixTimestamp = _playPosition;
+                playMarkAllowMove = true;
             }
+
+            isDragPlay = false;
         }
-        private bool IsMouseLeftButtonDown = false;
+
+        private bool isDragPlay = false;
 
         private void PlayBorder_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
-            IsMouseLeftButtonDown = true;
-            playMarkAllowMove = false;
+            isDragPlay = true;
             _mousePosition2 = e.GetPosition(this);
             _playPosition2 = _playPosition;
             playBorder.Cursor = Cursors.SizeWE;
@@ -67,6 +82,7 @@ namespace WpfControls
 
         private void PlayBorder_MouseLeave(object sender, MouseEventArgs e)
         {
+            if (isDragPlay) return;
             playMarkAllowMove = true;
         }
 
@@ -84,8 +100,7 @@ namespace WpfControls
         {
             e.Handled = true;
             var mousePosition = e.GetPosition(this);
-            var mouseLeftButtonDown = e.LeftButton == MouseButtonState.Pressed;
-            if (mouseLeftButtonDown)
+            if (isDragPlay && e.LeftButton == MouseButtonState.Pressed)
             {
                 var leftPixes = (mousePosition - _mousePosition2).X;
                 if (leftPixes == 0) return;
@@ -109,8 +124,7 @@ namespace WpfControls
         private void Grid_MouseMove(object sender, MouseEventArgs e)
         {
             var mousePosition = e.GetPosition(this);
-            var mouseLeftButtonDown = e.LeftButton == MouseButtonState.Pressed;
-            if (mouseLeftButtonDown)
+            if (isDragGrid && e.LeftButton == MouseButtonState.Pressed)
             {
                 var originLeft = (double)grid.GetValue(System.Windows.Controls.Canvas.LeftProperty);
                 if (double.IsNaN(originLeft)) originLeft = 0;
