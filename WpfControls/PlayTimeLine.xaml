@@ -12,7 +12,11 @@
                 <Setter.Value>
                     <ControlTemplate TargetType="Control">
                         <Canvas Background="{TemplateBinding Background}">
-                            <TextBlock Text="{Binding}" Margin="-55,-23,0,0" Foreground="{TemplateBinding Background}"/>
+                            <!--<TextBlock Text="{Binding}" Margin="-55,-23,0,0" Foreground="{TemplateBinding Background}"/>-->
+                            <local:EditableTextBlack Text="{Binding PlayDateTime, Mode=TwoWay}" 
+                                                     EditOpend="{Binding IsEditPlayDateTime, Mode=OneWayToSource}"
+                                                     Margin="-55,-23,0,0" 
+                                                     Foreground="{TemplateBinding Background}" Background="Transparent"/>
                             <Rectangle Width="21" Height="5" Fill="{TemplateBinding Background}"
                                        Margin="-10,-5,0,0"/>
                         </Canvas>
@@ -20,7 +24,7 @@
                 </Setter.Value>
             </Setter>
         </Style>
-        
+
         <Style TargetType="ToolTip">
             <Setter Property="Template">
                 <Setter.Value>
@@ -36,7 +40,7 @@
             <Grid x:Name="grid" Height="40" Background="Transparent">
                 <Grid x:Name="markGrid"/>
                 <Grid x:Name="recordGrid" Height="3" Background="Transparent" VerticalAlignment="Bottom"/>
-                <Control x:Name="playBorder" Style="{DynamicResource playLine}" Width="2" Background="Green" HorizontalAlignment="Left" Visibility="Hidden"/>
+                <Control x:Name="playBorder" Style="{DynamicResource playLine}" Focusable="False" Width="2" Background="Green" HorizontalAlignment="Left" Visibility="Hidden"/>
             </Grid>
         </Canvas>
         <TextBlock x:Name="unitTxt" HorizontalAlignment="Right" VerticalAlignment="Top"/>

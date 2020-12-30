@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -19,7 +20,7 @@ namespace WpfControls
     /// PlayTimeLine.xaml 的交互逻辑
     /// *Mark是刻度的意思
     /// </summary>
-    public partial class PlayTimeLine : UserControl
+    public partial class PlayTimeLine : UserControl, System.ComponentModel.INotifyPropertyChanged
     {
         public PlayTimeLine()
         {
@@ -41,6 +42,7 @@ namespace WpfControls
             playBorder.MouseLeave += PlayBorder_MouseLeave;
             playBorder.MouseLeftButtonDown += PlayBorder_MouseLeftButtonDown;
             playBorder.MouseLeftButtonUp += PlayBorder_MouseLeftButtonUp;
+            playBorder.DataContext = this;
         }
 
         private bool isDragGrid = false;
@@ -497,6 +499,28 @@ namespace WpfControls
             });
         }
 
+
+        private string playDateTime;
+        public string PlayDateTime
+        {
+            get => playDateTime; set
+            {
+                DateTime dt;
+                var state = DateTime.TryParse(value, out dt);
+                if (state)
+                {
+                    playDateTime = value;
+                    PlayUnixTimestamp = (dt - baseTime).TotalSeconds;
+                }
+            }
+        }
+
+        /// <summary>
+        /// 是否在编辑时间
+        /// </summary>
+        public bool IsEditPlayDateTime { get; set; }
+
+
         /// <summary>
         /// 刷新播放刻度
         /// </summary>
@@ -504,10 +528,13 @@ namespace WpfControls
         private void RefreshPlayMark(double playPosition)
         {
             var leftPixes = playPosition * ratioPixesWithValue;
-            var playDateTime = baseTime.AddSeconds(playPosition + leftValue);
-            playBorder.Margin = new Thickness { Left = leftPixes };
-            playBorder.DataContext = playDateTime.ToString(timeStringFormat);
+            playDateTime = baseTime.AddSeconds(playPosition + leftValue).ToString(timeStringFormat);
+
+            if (this.PropertyChanged != null)
+                this.PropertyChanged(this, new PropertyChangedEventArgs("PlayDateTime"));
+
             playBorder.Visibility = Visibility.Visible;
+            playBorder.Margin = new Thickness { Left = leftPixes };
         }
 
         /// <summary>
@@ -545,7 +572,7 @@ namespace WpfControls
             }
 
 
-            if (playMarkAllowMove)
+            if (playMarkAllowMove && !IsEditPlayDateTime)
             {
                 while (true)
                 {
@@ -607,9 +634,12 @@ namespace WpfControls
             set { SetValue(RecordTimeSpanListProperty, value); }
         }
 
+
         // Using a DependencyProperty as the backing store for RecordTimeSpanList.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty RecordTimeSpanListProperty =
             DependencyProperty.Register("RecordTimeSpanList", typeof(List<double[]>), typeof(PlayTimeLine), new PropertyMetadata(null, RecordTimeSpanListPropertyChangedCallback));
+
+        public event PropertyChangedEventHandler PropertyChanged;
 
         public static void RecordTimeSpanListPropertyChangedCallback(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {

@@ -10,7 +10,12 @@
              x:Name="thisControl"
              KeyDown="UserControl_KeyDown">
     <Grid>
-        <TextBlock x:Name="textBlock" Visibility="Visible" FontSize="{Binding ElementName=thisControl, Path=FontSize}"/>
-        <TextBox x:Name="tb" Visibility="Hidden" FontSize="{Binding ElementName=thisControl, Path=FontSize}"/>
+        <TextBlock x:Name="textBlock" Visibility="Visible"
+                   FontSize="{Binding ElementName=thisControl, Path=FontSize}"
+                   Foreground="{Binding ElementName=thisControl, Path=Foreground}"/>
+        <TextBox x:Name="tb" Visibility="Hidden" 
+                 FontSize="{Binding ElementName=thisControl, Path=FontSize}"
+                 Foreground="{Binding ElementName=thisControl, Path=Foreground}"
+                 Background="{Binding ElementName=thisControl, Path=Background}"/>
     </Grid>
 </UserControl>

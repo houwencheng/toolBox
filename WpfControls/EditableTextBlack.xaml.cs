@@ -71,6 +71,7 @@ namespace WpfControls
             tb.SelectAll();
             tb.LostFocus -= Tb_LostFocus;
             tb.LostFocus += Tb_LostFocus;
+            EditOpend = true;
         }
 
         private void Tb_LostFocus(object sender, RoutedEventArgs e)
@@ -85,6 +86,24 @@ namespace WpfControls
             textBlock.Visibility = Visibility.Visible;
             //BindingExpression binding = this.GetBindingExpression(TextProperty);
             //binding.UpdateSource();
+            EditOpend = false;
         }
+
+
+
+        /// <summary>
+        /// 打开编辑状态
+        /// </summary>
+        public bool EditOpend
+        {
+            get { return (bool)GetValue(EditOpendProperty); }
+            set { SetValue(EditOpendProperty, value); }
+        }
+
+        // Using a DependencyProperty as the backing store for EditOpend.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty EditOpendProperty =
+            DependencyProperty.Register("EditOpend", typeof(bool), typeof(EditableTextBlack), new PropertyMetadata(false));
+
+
     }
 }
