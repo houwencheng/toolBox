@@ -77,7 +77,14 @@ namespace WpfControls
         {
             if (Paths == null) Paths = new List<Model.Path>();
 
-            var additionPath = new Model.Path { Name = "新区域"};
+            var additionPath = new Model.Path();
+            additionPath.Color = DefaultPathColor;
+            if (PathNameEnable)
+            {
+                additionPath.Name = "新区域";
+            }
+
+
             Paths.Insert(0, additionPath);
             var additionControl = BuildDrawLineControl(additionPath);
             grid.Children.Insert(0, additionControl);
@@ -92,6 +99,12 @@ namespace WpfControls
 
         private void ControlAddition_FinishedEvent(DrawLineControl drawLineControl)
         {
+            if (!MutiPathEnable && grid.Children.Count > 1)
+            {
+                grid.Children.RemoveAt(1);
+                Paths.RemoveAt(1);
+            }
+
             AddOneAdditionPath();
         }
 
@@ -101,5 +114,53 @@ namespace WpfControls
             var points = control.Points;
             //throw new NotImplementedException();
         }
+
+
+
+
+
+        /// <summary>
+        /// 允许路径名称
+        /// </summary>
+        public bool PathNameEnable
+        {
+            get { return (bool)GetValue(PathNameEnableProperty); }
+            set { SetValue(PathNameEnableProperty, value); }
+        }
+
+        // Using a DependencyProperty as the backing store for PathNameEnable.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty PathNameEnableProperty =
+            DependencyProperty.Register("PathNameEnable", typeof(bool), typeof(DrawPathsControl), new PropertyMetadata(true));
+
+
+
+        /// <summary>
+        /// 路径默认颜色
+        /// </summary>
+        public Model.Color DefaultPathColor
+        {
+            get { return (Model.Color)GetValue(DefaultPathColorProperty); }
+            set { SetValue(DefaultPathColorProperty, value); }
+        }
+
+        // Using a DependencyProperty as the backing store for DefaultPathColor.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty DefaultPathColorProperty =
+            DependencyProperty.Register("DefaultPathColor", typeof(Model.Color), typeof(DrawPathsControl), new PropertyMetadata(new Model.Color { HexRGB = "#ff0000" }));
+
+
+        /// <summary>
+        /// 多路径
+        /// </summary>
+        public bool MutiPathEnable
+        {
+            get { return (bool)GetValue(MutiPathEnableProperty); }
+            set { SetValue(MutiPathEnableProperty, value); }
+        }
+
+        // Using a DependencyProperty as the backing store for MutiPathEnable.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty MutiPathEnableProperty =
+            DependencyProperty.Register("MutiPathEnable", typeof(bool), typeof(DrawPathsControl), new PropertyMetadata(true));
+
+
     }
 }
