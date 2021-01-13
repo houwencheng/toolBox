@@ -155,7 +155,7 @@ namespace WpfControls
         private void Grid_MouseWheel(object sender, MouseWheelEventArgs e)
         {
             var tempIndex = _markSpanPixesIndex;
-            if (e.Delta > 0)
+            if (e.Delta < 0)
             {
                 if (_markSpanPixesIndex < _markSpanPixesList.Count - 1)
                 {
