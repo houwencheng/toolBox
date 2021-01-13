@@ -75,6 +75,7 @@
     <Compile Include="ExpressionHelper.cs" />
     <Compile Include="FtpClientHelper.cs" />
     <Compile Include="LogHelper.cs" />
+    <Compile Include="NTPClient.cs" />
     <Compile Include="PageQueryObject.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Speaker.cs" />

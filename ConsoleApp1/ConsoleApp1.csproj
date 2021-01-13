@@ -84,6 +84,10 @@
       <Project>{6a712d2f-0e7f-4034-a139-0c1c5683a03f}</Project>
       <Name>Security</Name>
     </ProjectReference>
+    <ProjectReference Include="..\UnitTestProject1\UnitTestProject1.csproj">
+      <Project>{f23a657f-3ef9-4901-a1d4-4da82865fa5f}</Project>
+      <Name>UnitTestProject1</Name>
+    </ProjectReference>
     <ProjectReference Include="..\WpfControls\WpfControls.csproj">
       <Project>{fc87fbfa-307c-4ba3-aa3b-46035d8a52eb}</Project>
       <Name>WpfControls</Name>

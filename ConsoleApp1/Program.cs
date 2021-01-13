@@ -13,6 +13,11 @@ namespace ConsoleApp1
         [MTAThread]
         static void Main(string[] args)
         {
+
+            UnitTestProject1.NTPClientTest nTPClientTest = new UnitTestProject1.NTPClientTest();
+            nTPClientTest.TestMethod1();
+            Console.ReadLine();
+            return;
             //InterFace.IProgramRun programRun = new ThreadExample();
             ////programRun = new MD5Example();
             ////programRun = new CpuTestExample();
