@@ -11,12 +11,14 @@ namespace UnitTestProject1
         {
             string timeServer;
             //var timeServer = "192.168.2.198";
-            //timeServer = "time.windows.com";
-            timeServer = "192.168.2.198";
-            var iPAddress = System.Net.IPAddress.Parse(timeServer);
-            Tool.NTPClient nTPClient = new Tool.NTPClient(iPAddress);
+            timeServer = "time.windows.com";
+            //timeServer = "192.168.2.198";
+            //var iPAddress = System.Net.IPAddress.Parse(timeServer);
+            //Tool.NTPClient nTPClient = new Tool.NTPClient(iPAddress);
+            Tool.NTPClient nTPClient = new Tool.NTPClient(timeServer);
             nTPClient.Connect(true);
 
+            Console.WriteLine(nTPClient.ToString());
             Console.ReadLine();
         }
     }
