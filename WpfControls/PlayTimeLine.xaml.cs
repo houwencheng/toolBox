@@ -32,10 +32,6 @@ namespace WpfControls
             grid.MouseLeftButtonDown += Grid_MouseLeftButtonDown;
             grid.MouseLeftButtonUp += Grid_MouseLeftButtonUp;
 
-            leftValue = (DateTime.Now.Date.AddDays(-1) - baseTime).TotalSeconds;
-            _playPosition = leftValue;
-            UpdateMarkUnitTxt();
-
             //SimuPlay();
             playBorder.MouseEnter += PlayBorder_MouseEnter;
             playBorder.MouseMove += PlayBorder_MouseMove;
@@ -64,8 +60,8 @@ namespace WpfControls
                 _playPosition = _playPosition2;
                 playBorder.Cursor = Cursors.Arrow;
                 e.Handled = true;
-                PlayUnixTimestamp = _playPosition;
-                playMarkAllowMove = true;
+                if (PlayUnixTimestamp != _playPosition)
+                    PlayUnixTimestamp = _playPosition;
             }
 
             isDragPlay = false;
@@ -84,8 +80,8 @@ namespace WpfControls
 
         private void PlayBorder_MouseLeave(object sender, MouseEventArgs e)
         {
-            if (isDragPlay) return;
             playMarkAllowMove = true;
+            isDragPlay = false;
         }
 
         private void PlayBorder_MouseEnter(object sender, MouseEventArgs e)
@@ -94,7 +90,7 @@ namespace WpfControls
         }
 
         private bool playMarkAllowMove = true;
-        private string timeStringFormat = "yyyy-MM-dd HH:mm:ss";
+        private string timeStringFormat = "yyyy/MM/dd HH:mm:ss";
 
         private Point _mousePosition2;
         private double _playPosition2;
@@ -149,7 +145,7 @@ namespace WpfControls
 
         private void Grid_SizeChanged(object sender, SizeChangedEventArgs e)
         {
-            Refresh();
+            ReBuild();
         }
 
         private void Grid_MouseWheel(object sender, MouseWheelEventArgs e)
@@ -170,9 +166,15 @@ namespace WpfControls
                 }
             }
 
-            UpdateMarkUnitTxt();
             if (tempIndex != _markSpanPixesIndex)
-                Refresh();
+            {
+                var mousePosition = e.GetPosition(this);
+                var mousePositionValue = leftValue + mousePosition.X * _precisionList[tempIndex] / _markSpanPixesList[tempIndex];
+                leftValue = mousePositionValue - mousePosition.X * _precisionList[_markSpanPixesIndex] / _markSpanPixesList[_markSpanPixesIndex];
+
+                ReBuild();
+
+            }
 
         }
 
@@ -206,7 +208,7 @@ namespace WpfControls
 
             leftValue -= lefterWidth / ratioPixesWithValue;
 
-            Refresh();
+            ReBuild();
         }
 
         /// <summary>
@@ -219,7 +221,7 @@ namespace WpfControls
             var righterWidth = widthDiff / 2;
             grid.SetValue(Canvas.LeftProperty, -righterWidth);
             leftValue += righterWidth / ratioPixesWithValue;
-            Refresh();
+            ReBuild();
         }
 
         #endregion
@@ -229,7 +231,7 @@ namespace WpfControls
         /// <summary>
         /// 相邻等级刻度高度等比
         /// </summary>
-        private double _levelHeightRatio = 1.5;
+        private double _levelHeightRatio = 1.3;
         /// <summary>
         /// 调刻度相距上边的距离
         /// </summary>
@@ -326,11 +328,13 @@ namespace WpfControls
 
 
         /// <summary>
-        /// 生成刻度
+        /// 重新生成刻度和录像记录
         /// </summary>
-        private void Refresh()
+        private void ReBuild()
         {
+            // 刻度线
             BuildMark();
+            // 记录线
             if (_recordTimeSpan != null && _recordTimeSpan.Count > 0)
                 BuildVieoRecord();
         }
@@ -367,11 +371,13 @@ namespace WpfControls
                 path.Data = lineGeometry;
                 path.Stroke = this.Foreground;
                 var markValue = leftValue + _precisionList[_markSpanPixesIndex] * i;
-                var markDateTime = baseTime.AddSeconds(markValue);
+                var markDateTime = baseTime.AddSeconds(markValue).ToLocalTime();
                 path.DataContext = markDateTime;
                 path.ToolTip = string.Format("{1}", i, markDateTime.ToString(timeStringFormat));
                 markGrid.Children.Add(path);
             }
+
+            UpdateMarkUnitTxt();
         }
 
         /// <summary>
@@ -400,13 +406,55 @@ namespace WpfControls
         public void SetRecordTimespan(List<double[]> timeSpan)
         {
             _recordTimeSpan = timeSpan;
-            BuildVieoRecord();
+            AutoAjustRecordTimespanToView();
+            ReBuild();
+        }
+
+        /// <summary>
+        /// 自动调整录像时段到可视区域
+        /// </summary>
+        private void AutoAjustRecordTimespanToView()
+        {
+            double minValue = 0;
+            double maxValue = 0;
+            for (int i = 0; i < _recordTimeSpan.Count; i++)
+            {
+                var record = _recordTimeSpan[i];
+                var begin = record[0];
+                var end = record[1];
+
+                if (i == 0)
+                {
+                    minValue = begin;
+                    maxValue = end;
+                    continue;
+                }
+
+                if (minValue > begin) minValue = begin;
+                if (maxValue < end) maxValue = end;
+            }
+
+            leftValue = minValue;
+
+            var maxDiff = maxValue - minValue;
+            var maxWidth = recordGrid.ActualWidth;
+
+            for (int i = 0; i < _markSpanPixesList.Count; i++)
+            {
+                _markSpanPixesIndex = i;
+                var unitPixes = _markSpanPixesList[_markSpanPixesIndex];
+                var unitValue = _precisionList[_markSpanPixesIndex];
+                if (maxWidth > maxDiff / unitValue * unitPixes)
+                {
+                    break;
+                }
+            }
         }
 
         /// <summary>
         /// 生成录像刻度
         /// </summary>
-        public void BuildVieoRecord()
+        private void BuildVieoRecord()
         {
             recordGrid.Children.Clear();
 
@@ -416,7 +464,6 @@ namespace WpfControls
             var height = recordGrid.ActualHeight;
             var maxWidth = recordGrid.ActualWidth;
 
-
             for (int i = 0; i < _recordTimeSpan.Count; i++)
             {
                 var record = _recordTimeSpan[i];
@@ -424,17 +471,11 @@ namespace WpfControls
                 x = (begin - leftValue) * ratioPixesWithValue;
 
                 var end = record[1];
-                if (end > begin)
-                {
-                    width = (end - begin) * ratioPixesWithValue;
-                }
-                else
-                {
-                    width = maxWidth - x;
-                }
+                width = (end - begin) * ratioPixesWithValue;
 
                 if (x + width < 0) continue;
                 if (x > maxWidth) continue;
+                if (width <= 0) continue;
 
                 System.Windows.Media.RectangleGeometry rectangleGeometry = new RectangleGeometry();
                 rectangleGeometry.Rect = new Rect { X = x, Y = y, Height = height, Width = width };
@@ -442,13 +483,10 @@ namespace WpfControls
                 Path path = new Path();
                 path.Fill = Brushes.Green;
                 path.Data = rectangleGeometry;
-                var beginDateTime = baseTime.AddSeconds(begin);
-                var endDateTime = baseTime.AddSeconds(end);
+
+                var beginDateTime = baseTime.AddSeconds(begin).ToLocalTime();
+                var endDateTime = baseTime.AddSeconds(end).ToLocalTime();
                 var format = "{1}到{2}";
-                if (end < begin)
-                {
-                    format = "{1}起一直持续";
-                }
 
                 path.DataContext = record;
                 path.ToolTip = string.Format(format, i, beginDateTime.ToString(timeStringFormat), endDateTime.ToString(timeStringFormat));
@@ -510,7 +548,7 @@ namespace WpfControls
                 if (state)
                 {
                     playDateTime = value;
-                    PlayUnixTimestamp = (dt - baseTime).TotalSeconds;
+                    PlayUnixTimestamp = (dt.ToUniversalTime() - baseTime).TotalSeconds;
                 }
             }
         }
@@ -528,7 +566,7 @@ namespace WpfControls
         private void RefreshPlayMark(double playPosition)
         {
             var leftPixes = playPosition * ratioPixesWithValue;
-            playDateTime = baseTime.AddSeconds(playPosition + leftValue).ToString(timeStringFormat);
+            playDateTime = baseTime.AddSeconds(playPosition + leftValue).ToLocalTime().ToString(timeStringFormat);
 
             if (this.PropertyChanged != null)
                 this.PropertyChanged(this, new PropertyChangedEventArgs("PlayDateTime"));
@@ -572,7 +610,9 @@ namespace WpfControls
             }
 
 
-            if (playMarkAllowMove && !IsEditPlayDateTime)
+            if (playMarkAllowMove
+                && !IsEditPlayDateTime
+                && !isDragPlay)
             {
                 while (true)
                 {

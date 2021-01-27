@@ -29,7 +29,9 @@
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="ToolTip">
-                        <TextBlock Text="{TemplateBinding ToolTip.Content}"/>
+                        <Border Background="{TemplateBinding Foreground}" Opacity="0.9">
+                            <TextBlock Text="{TemplateBinding ToolTip.Content}"/>
+                        </Border>
                     </ControlTemplate>
                 </Setter.Value>
             </Setter>
