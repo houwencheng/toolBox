@@ -62,6 +62,7 @@
     <Compile Include="RSAExExample.cs" />
     <Compile Include="StructTest.cs" />
     <Compile Include="ThreadExample.cs" />
+    <Compile Include="TuplesTest.cs" />
     <Compile Include="WpfApp.cs" />
   </ItemGroup>
   <ItemGroup>
