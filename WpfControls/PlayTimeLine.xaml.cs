@@ -268,8 +268,8 @@ namespace WpfControls
             "12小时",
             "1天",
             "1周",
-            "1月",
-            "1年"};
+            "约1月",
+            "约1年"};
         /// <summary>
         /// 单位刻度像素宽度列表
         /// </summary>
@@ -386,8 +386,6 @@ namespace WpfControls
         private void UpdateMarkUnitTxt()
         {
             var text = _precisionListName[_markSpanPixesIndex];
-            if (text.Contains("月") || text.Contains("年"))
-                text = string.Format("约{0}", text);
             unitTxt.Text = text;
         }
 
