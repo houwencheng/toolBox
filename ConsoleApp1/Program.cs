@@ -36,7 +36,7 @@ namespace ConsoleApp1
         [MTAThread]
         static void Main(string[] args)
         {
-            var d1 = new { X = 1, Y = 2 };
+            //var d1 = new { X = 1, Y = 2 };
             
             //SumDelegate sumDelegate = new SumDelegate(Sum);
             //List<int> list = new List<int>() { 1, 2, 3, 4, 5, 6, 7, 8, 9 };
@@ -55,7 +55,7 @@ namespace ConsoleApp1
             InterFace.IProgramRun programRun = new TuplesTest();
             //programRun = new MD5Example();
             //programRun = new CpuTestExample();
-            programRun = new OutShort();
+            programRun = new FileRename();
             programRun.Run();
             return;
 

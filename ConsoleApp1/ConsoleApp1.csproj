@@ -52,6 +52,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CpuTestExample.cs" />
+    <Compile Include="FileRename.cs" />
     <Compile Include="InterFace\IPrangramRun.cs" />
     <Compile Include="MD5Example.cs" />
     <Compile Include="MutiThreadTest.cs" />
