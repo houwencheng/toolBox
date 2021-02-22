@@ -55,7 +55,8 @@ namespace ConsoleApp1
             InterFace.IProgramRun programRun = new TuplesTest();
             //programRun = new MD5Example();
             //programRun = new CpuTestExample();
-            programRun = new FileRename();
+            //programRun = new FileRename();
+            programRun = new ThreadExample();
             programRun.Run();
             return;
 
