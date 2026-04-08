@@ -14,7 +14,7 @@ namespace httpFileShare.NancyModule
 
         public FileModule() : base("/file")
         {
-            Get("/{name}", x =>
+            Get("/", x =>
             {
                 var env = this.Context.GetOwinEnvironment();
 
@@ -26,41 +26,55 @@ namespace httpFileShare.NancyModule
                 var requestProtocol = (string)env["owin.RequestProtocol"];
                 var requestQueryString = (string)env["owin.RequestQueryString"];
                 var requestScheme = (string)env["owin.RequestScheme"];
-
-
                 var owinVersion = (string)env["owin.Version"];
                 var cancellationToken = (System.Threading.CancellationToken)env["owin.CallCancelled"];
 
-                var uri = (string)env["owin.RequestScheme"] + "://" + requestHeaders["Host"].First() +
-                  (string)env["owin.RequestPathBase"] + (string)env["owin.RequestPath"];
+                var uri = requestScheme + "://" + requestHeaders["Host"].First() +
+                  requestPathBase + requestPath;
 
-                if (env["owin.RequestQueryString"] != "")
-                    uri += "?" + (string)env["owin.RequestQueryString"];
+                if (requestQueryString != "")
+                    uri += "?" + requestQueryString;
+                Console.WriteLine(uri);
 
-                var fileName = x["name"];
+                var fileName = Uri.UnescapeDataString(requestQueryString);
                 var responseBody = (Stream)env["owin.ResponseBody"];
                 var responseHeaders = (IDictionary<string, string[]>)env["owin.ResponseHeaders"];
-                responseHeaders.Add("Content-Disposition", new string[] { "attachment; filename=" + fileName });
-                System.IO.DirectoryInfo directoryInfo = new DirectoryInfo(ShareFloder);
-                var floder = System.IO.Path.GetDirectoryName(ShareFloder);
-                var fullFileName = System.IO.Path.Combine(floder, fileName);
+                var fullFileName = System.IO.Path.Combine(ShareFloder, fileName);
 
-                using (var fs = System.IO.File.OpenRead(fullFileName))
+                if (File.Exists(fullFileName))
                 {
-                    var fileLength = fs.Length;
-                    var bufferLength = 1024 * 1024 * 10;
-                    var buffer = new byte[bufferLength];
-
-                    while (true)
+                    responseHeaders.Add("Content-Disposition", new string[] { "attachment; filename=" + fileName });
+                    responseHeaders.Add("Content-Type", new string[] { "application/octet-stream" });
+                    using (var fs = System.IO.File.OpenRead(fullFileName))
                     {
-                        var readCount = fs.Read(buffer, 0, buffer.Length);
-                        if (readCount == 0) break;
-                        responseBody.Write(buffer, 0, readCount);
+                        var fileLength = fs.Length;
+                        var bufferLength = 1024 * 1024 * 10;
+                        var buffer = new byte[bufferLength];
+
+                        while (true)
+                        {
+                            var readCount = fs.Read(buffer, 0, buffer.Length);
+                            if (readCount == 0) break;
+                            responseBody.Write(buffer, 0, readCount);
+                        }
                     }
                 }
+                else
+                {
+                    var notExist = @"
+<html>
+<head>
+<meta charset='utf-8'/>
+</head>
+<body>
+notExist 中文
+</body>
+</html>";
 
-                //Nancy.Responses.GenericFileResponse genericFileResponse = new Nancy.Responses.GenericFileResponse(fullFileName, this.Context);
-                //return string.Format("{0} {1} fileName:{2}", requestMethod, uri, fileName);
+                    var buffer = UTF8Encoding.UTF8.GetBytes(notExist);
+                    responseBody.Write(buffer, 0, buffer.Length);
+                }
+
                 return "";
             });
         }

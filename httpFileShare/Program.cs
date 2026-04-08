@@ -13,7 +13,7 @@ namespace httpFileShare
 
             while (true)
             {
-                Console.WriteLine("file share floder:");
+                Console.WriteLine("Share floder:");
                 var shareFloder = Console.ReadLine();
                 var floderNotOk = !System.IO.Directory.Exists(shareFloder);
                 if (floderNotOk)
